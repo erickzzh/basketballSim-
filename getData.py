@@ -2,11 +2,10 @@ import base64
 import requests
 import urllib
 import json
+import username_password as authorize
 from pprint import pprint
 from ohmysportsfeedspy import MySportsFeeds
 
-usernmae=""
-password=""
 
 #global variables
 file_format=None
@@ -32,11 +31,11 @@ more_data=True
 #     if season_name_type=="playoff":
 #         global Output
 #         Data_query = MySportsFeeds('1.0',verbose=True)
-#         Data_query.authenticate(usernmae, password)
+#         Data_query.authenticate(authorize.username, authorize.password)
 #         Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_category,format=file_format)#can add more optional params manually 
 #     else:
 #         Data_query = MySportsFeeds('1.0',verbose=True)
-#         Data_query.authenticate(usernmae, password)
+#         Data_query.authenticate(authorize.username, authorize.password)
 #         Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_category,format=file_format,)#can add more optional params manually 
 #     clear_input()
 
@@ -75,16 +74,16 @@ def request_general():
         if season_name_type=="playoff":
             
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_type[x],format=file_format)#can add more optional params manually 
         elif data_type[x]== "playoff_team_standings":
 
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+"playoff",feed=data_type[x],format=file_format)#can add more optional params manually 
         else:
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_type[x],format=file_format)#can add more optional params manually 
 def request_daily():
     initial_inputs()
@@ -96,21 +95,21 @@ def request_daily():
             if season_name_type=="playoff":
                 global Output
                 Data_query = MySportsFeeds('1.0',verbose=True)
-                Data_query.authenticate(usernmae, password)
+                Data_query.authenticate(authorize.username, authorize.password)
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_type[x],format=file_format,fordate=date)#can add more optional params manually 
             else: 
                 Data_query = MySportsFeeds('1.0',verbose=True)
-                Data_query.authenticate(usernmae, password)
+                Data_query.authenticate(authorize.username, authorize.password)
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_type[x],format=file_format,fordate=date)#can add more optional params manually 
     else:
         if season_name_type=="playoff":
             global Output
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_category,format=file_format,fordate=date)#can add more optional params manually 
         else: 
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_category,format=file_format,fordate=date)#can add more optional params manually 
 def request_gamelogs():
     initial_inputs()
@@ -121,22 +120,22 @@ def request_gamelogs():
         if season_name_type=="playoff":
             global Output
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed="player_gamelogs",format=file_format,player=plyaer)#can add more optional params manually 
         else: 
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed="player_gamelogs",format=file_format,player=plyaer)#can add more optional params manually 
     else:
         team=input("Enter the team's abbr in the form of: abbreviation or city-teamname")
         if season_name_type=="playoff":
             global Output
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed="team_gamelogs",format=file_format,team=team)#can add more optional params manually 
         else: 
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed="team_gamelogs",format=file_format,team=team)#can add more optional params manually 
 def request_game():
     initial_inputs()
@@ -148,29 +147,29 @@ def request_game():
             if season_name_type=="playoff":
                 global Output
                 Data_query = MySportsFeeds('1.0',verbose=True)
-                Data_query.authenticate(usernmae, password)
+                Data_query.authenticate(authorize.username, authorize.password)
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_type[x],format=file_format,gameid=gameid)#can add more optional params manually 
             else: 
                 Data_query = MySportsFeeds('1.0',verbose=True)
-                Data_query.authenticate(usernmae, password)
+                Data_query.authenticate(authorize.username, authorize.password)
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_type[x],format=file_format,gameid=gameid)#can add more optional params manually 
     else:
         if season_name_type=="playoff":
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_category,format=file_format,gameid=gameid)#can add more optional params manually 
         else: 
             Data_query = MySportsFeeds('1.0',verbose=True)
-            Data_query.authenticate(usernmae, password)
+            Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_category,format=file_format,gameid=gameid)#can add more optional params manually 
 
 #if delete every 5 mins redownload 
-
-print("Enter 'general' for data contain \ncumulative player stats\nfull game schedule\nactive player\noverall team standings\nconference team standings\ndivision team standings\nplayoff team standings\nplayer injuries\nlatest updates\n\n")
-print("Or enter 'daily'  for \ndaily_game_schedule\ndaily_player_stats three\nscoreboard\n\n")
-print("or enter 'gamelogs' for \nplayer game logs\nteam game logs\n\n")
-print("or enter 'game' for \ngame_playbyplay\ngame_boxscore\ngame_startinglineup\n\n")
 while more_data:
+    print("Enter 'general' for data contain \ncumulative player stats\nfull game schedule\nactive player\noverall team standings\nconference team standings\ndivision team standings\nplayoff team standings\nplayer injuries\nlatest updates\n\n")
+    print("Or enter 'daily'  for \ndaily_game_schedule\ndaily_player_stats three\nscoreboard\n\n")
+    print("or enter 'gamelogs' for \nplayer game logs\nteam game logs\n\n")
+    print("or enter 'game' for \ngame_playbyplay\ngame_boxscore\ngame_startinglineup\n\n")
+
     request_type=input("Enter the data type: ")
     if request_type=="general":
         request_general()
