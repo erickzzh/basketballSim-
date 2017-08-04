@@ -5,8 +5,8 @@ import json
 from pprint import pprint
 from ohmysportsfeedspy import MySportsFeeds
 
-usernmae="erickzzh"
-password="zzh970310"
+usernmae=""
+password=""
 
 #global variables
 file_format=None
@@ -189,6 +189,7 @@ while more_data:
         clear_input()
     else:
         more_data=None
+        
         clear_input()
 
 
