@@ -29,7 +29,7 @@ more_data=True
     
 #     #differentiate the two type of games 
 #     if season_name_type=="playoff":
-#         global Output
+#         
 #         Data_query = MySportsFeeds('1.0',verbose=True)
 #         Data_query.authenticate(authorize.username, authorize.password)
 #         Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_category,format=file_format)#can add more optional params manually 
@@ -48,6 +48,7 @@ def clear_input():
     URL=None
 
 def initial_inputs():
+    
     global file_format
     global league_name
     global season_name_begin
@@ -93,7 +94,7 @@ def request_daily():
     if data_category=="all":
         for x in range(0,3):
             if season_name_type=="playoff":
-                global Output
+                
                 Data_query = MySportsFeeds('1.0',verbose=True)
                 Data_query.authenticate(authorize.username, authorize.password)
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_type[x],format=file_format,fordate=date)#can add more optional params manually 
@@ -103,7 +104,7 @@ def request_daily():
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_type[x],format=file_format,fordate=date)#can add more optional params manually 
     else:
         if season_name_type=="playoff":
-            global Output
+            
             Data_query = MySportsFeeds('1.0',verbose=True)
             Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_category,format=file_format,fordate=date)#can add more optional params manually 
@@ -118,7 +119,7 @@ def request_gamelogs():
     if data_category=="player":
         player=input("Enter the player's name in the form of: last name, first-last,first-last-playerID")
         if season_name_type=="playoff":
-            global Output
+            
             Data_query = MySportsFeeds('1.0',verbose=True)
             Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed="player_gamelogs",format=file_format,player=plyaer)#can add more optional params manually 
@@ -129,7 +130,7 @@ def request_gamelogs():
     else:
         team=input("Enter the team's abbr in the form of: abbreviation or city-teamname")
         if season_name_type=="playoff":
-            global Output
+            
             Data_query = MySportsFeeds('1.0',verbose=True)
             Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed="team_gamelogs",format=file_format,team=team)#can add more optional params manually 
@@ -145,7 +146,7 @@ def request_game():
     if data_category=="all":
         for x in range(0,3):
             if season_name_type=="playoff":
-                global Output
+                
                 Data_query = MySportsFeeds('1.0',verbose=True)
                 Data_query.authenticate(authorize.username, authorize.password)
                 Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed=data_type[x],format=file_format,gameid=gameid)#can add more optional params manually 
