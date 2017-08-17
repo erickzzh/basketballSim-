@@ -1,17 +1,22 @@
 from getData import *
 from Team_class import *
+from collections import OrderedDict
+import os
 
 
-NBA_teams_checklist=[]
+
+dir = os.path.dirname(__file__)+'/results/'
+NBA_teams_checklist={}
 NBA_teams={}
-active_players_json=open('/Users/erickzhang/Desktop/basketballsimulator/python/results/active_players-nba-2016-2017-regular.json').read()
-conference_team_standing_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/conference_team_standings-nba-2016-2017-regular.json").read()
-cumulative_player_stats_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/cumulative_player_stats-nba-2016-2017-regular.json").read()
-division_team_standings_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/division_team_standings-nba-2016-2017-regular.json").read()
-full_game_schedule_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/full_game_schedule-nba-2016-2017-regular.json").read()
-overall_team_standings_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/overall_team_standings-nba-2016-2017-regular.json").read()
-player_injuries_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/player_injuries-nba-2016-2017-regular.json").read()
-playoff_team_standings_json=open("/Users/erickzhang/Desktop/basketballsimulator/python/results/playoff_team_standings-nba-2016-playoff.json").read()
+Ranking={}
+active_players_json=open(dir+'active_players-nba-2016-2017-regular.json').read()
+conference_team_standing_json=open(dir+"conference_team_standings-nba-2016-2017-regular.json").read()
+cumulative_player_stats_json=open(dir+"cumulative_player_stats-nba-2016-2017-regular.json").read()
+division_team_standings_json=open(dir+"division_team_standings-nba-2016-2017-regular.json").read()
+full_game_schedule_json=open(dir+"full_game_schedule-nba-2016-2017-regular.json").read()
+overall_team_standings_json=open(dir+"overall_team_standings-nba-2016-2017-regular.json").read()
+player_injuries_json=open(dir+"player_injuries-nba-2016-2017-regular.json").read()
+playoff_team_standings_json=open(dir+"playoff_team_standings-nba-2016-playoff.json").read()
 
 active_players=json.loads(active_players_json)
 conference_team_standing=json.loads(conference_team_standing_json)
@@ -23,6 +28,7 @@ player_injuries=json.loads(player_injuries_json)
 playoff_team_standings=json.loads(playoff_team_standings_json)
 
 
+
 more_data=input("Enter data(Y/N): ")
 if more_data.lower() == 'y':
     more_data=True
@@ -31,7 +37,7 @@ else:
 
 while more_data:
     print("Enter 'general' for data contain \ncumulative player stats\nfull game schedule\nactive player\noverall team standings\nconference team standings\ndivision team standings\nplayoff team standings\nplayer injuries\nlatest updates\n\n")
-    print("Or enter 'daily'  for \ndaily_game_schedule\ndaily_player_stats three\nscoreboard\n\n")
+    print("Or enter 'daily'  for \ndaily_game_schedule\ndaily_player_stats three\nscoreboard\nroster_player\n\n")
     print("or enter 'gamelogs' for \nplayer game logs\nteam game logs\n\n")
     print("or enter 'game' for \ngame_playbyplay\ngame_boxscore\ngame_startinglineup\n\n")
 
@@ -58,26 +64,45 @@ while more_data:
 
 #populate the team check list to get a complete team abbre
 for a in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
-    team_name_shortcut=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Abbreviation'])
-    if team_name_shortcut not in NBA_teams_checklist:
-        NBA_teams_checklist.insert(len(NBA_teams_checklist),team_name_shortcut)
+    team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Abbreviation'])
+    team_name_and_city=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['City']+" "+cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Name'])
+    if team_name_abbr not in NBA_teams_checklist.keys():
+        NBA_teams_checklist[team_name_abbr]=team_name_and_city
     else:
         pass
 
+
 #create classes for each team
-for b in NBA_teams_checklist:
-    NBA_teams[b]=Team(b)
+for key,value in NBA_teams_checklist.items():
+    NBA_teams[key]=Team(key,value)
+
+
 
 #populate each team with a complete roster
 for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
-    team_name_shortcut=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['team']['Abbreviation'])
+    team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['team']['Abbreviation'])
     FirstName=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['player']['FirstName'] + " ")
     LastName=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['player']['LastName'])
     FullName=FirstName+LastName
-    NBA_teams[team_name_shortcut].add_players(FullName)
+    player_position=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['player']['Position'])
+    player_points_per_game=float(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['stats']['PtsPerGame']['#text'])
+    #populate the roster
+    NBA_teams[team_name_abbr].add_players_roster(FullName)
+    #populate the player class
+    NBA_teams[team_name_abbr].add_players_class(FirstName,LastName,player_points_per_game,player_position)
 
 
-NBA_teams['BOS'].print_roster()   
-NBA_teams['CLE'].print_roster()     
+#NBA_teams['BOS'].print_roster()   //print roster
+#NBA_teams['CLE'].print_player_points_helper("Kevin Love")      //print points by passing a name
+#NBA_teams['GSW'].team_theorical_points() 
 
 
+
+############################# ranking###################
+for y in NBA_teams_checklist:
+    Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_team_theorical_points()
+
+ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
+for key, value in ranking_descending.items() :
+    print (key, value)
+############################################

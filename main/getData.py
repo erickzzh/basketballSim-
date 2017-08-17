@@ -74,7 +74,7 @@ def request_general():
     season_name_type=input("Enter either 'regular' or 'playoff '")
     data_type=["cumulative_player_stats","full_game_schedule","active_players","overall_team_standings","conference_team_standings","division_team_standings","playoff_team_standings","player_injuries","latest_updates"]
     #for loop to download all the data at a given season
-    for x in range(0,9):
+    for x in range(0,len(data_type)):
         if season_name_type=="playoff":
             
             Data_query = MySportsFeeds('1.0',verbose=True)
@@ -91,11 +91,11 @@ def request_general():
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_type[x],format=file_format)#can add more optional params manually 
 def request_daily():
     initial_inputs()
-    data_type=["daily_game_schedule","daily_player_stats","scoreboard"]
+    data_type=["daily_game_schedule","daily_player_stats","scoreboard","roster_player"]
     data_category=input("Enter 'all' for daily_game_schedule, daily_player_stats three, and scoreboard or any given data: ")
     date= input("Enter the date of the data that you want in the format of YYYYMMDD: ")
     if data_category=="all":
-        for x in range(0,3):
+        for x in range(0,len(data_type)):
             if season_name_type=="playoff":
                 
                 Data_query = MySportsFeeds('1.0',verbose=True)
@@ -147,7 +147,7 @@ def request_game():
     data_category=input("Enter 'all' for game_playbyplay,game_boxscore,and game_startinglineup or any given data: ")
     gameid=input("Enter game id in the form of:game date YYYYMMDD + '-'+ away team abbr +'-'+ home team abbr. Example 20161212-BOS-CLE: ")
     if data_category=="all":
-        for x in range(0,3):
+        for x in range(0,len(data_type)):
             if season_name_type=="playoff":
                 
                 Data_query = MySportsFeeds('1.0',verbose=True)
