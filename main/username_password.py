@@ -1,2 +1,2 @@
-username="erickzzh"
-password="zzh970310"
+username=""
+password=""
