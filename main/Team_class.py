@@ -12,8 +12,13 @@ class Team:
 		#if this is decleared outside then the roster list is shared with the other instances in this case it is not
 		self.roster=[]
 		self.roster_class={}
+
 	def print_roster(self):
 		print (self.roster)
+
+	def print_roster_and_points(self):
+		for i in self.roster_class:
+			print (i,self.roster_class[i].points_per_game)
 
 	def print_team_name_abbr(self):
 		print (self.team_name_abbr)
@@ -27,12 +32,17 @@ class Team:
 		self.roster.insert(len(self.roster),players)
 #second create a dictionary and create a class for each element of the player then its fking go time
 	def add_players_class(self,first_name,last_name,points_per_game,position):
-	
 		self.roster_class[first_name+last_name]=Player(first_name,last_name,position,points_per_game)
 		
 
 	def print_player_points_helper(self,player_name):
 		self.roster_class[player_name].print_points_per_game()
+
+	def trade_players_roster(self,leaving_player,coming_player):
+		self.roster=[player.replace(leaving_player,coming_player) for player in self.roster]
+
+
+
 
 #calculates the team theorical points if everyone plays
 	def print_team_theorical_points(self):

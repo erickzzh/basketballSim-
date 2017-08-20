@@ -2,6 +2,7 @@ from getData import *
 from Team_class import *
 from collections import OrderedDict
 import os
+import help_function 
 
 
 
@@ -27,6 +28,34 @@ overall_team_standings=json.loads(overall_team_standings_json)
 player_injuries=json.loads(player_injuries_json)
 playoff_team_standings=json.loads(playoff_team_standings_json)
 
+#########################trade players###################
+def trade_player():
+    pprint(NBA_teams_checklist)
+    team1=input("Which team? (enter abbre only) : ").upper()
+    NBA_teams[team1].print_roster_and_points()
+    player1=input("Which player? (enter Full name including upper case) : ")#will change later
+    pprint(NBA_teams_checklist)
+    team2=input("Which team? (enter abbre only) : ").upper()
+    NBA_teams[team2].print_roster_and_points()
+    player2=input("Which player? (enter Full name including upper case) : ")#will change later
+    NBA_teams[team1].trade_players_roster(player1,player2)
+    NBA_teams[team2].trade_players_roster(player2,player1)
+    TEMP=NBA_teams[team1].roster_class[player1]
+    NBA_teams[team1].roster_class[player1]=NBA_teams[team2].roster_class[player2]
+    NBA_teams[team1].roster_class[player2]=NBA_teams[team1].roster_class.pop(player1)
+    NBA_teams[team2].roster_class[player2]=TEMP
+    NBA_teams[team2].roster_class[player1]=NBA_teams[team2].roster_class.pop(player2)
+########################################################
+
+# #############################ranking###################
+def ranking():
+    for y in NBA_teams_checklist:
+        Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_team_theorical_points()
+
+    ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
+    for key, value in ranking_descending.items() :
+        print (key, value)
+############################################
 
 
 more_data=input("Enter data(Y/N): ")
@@ -35,6 +64,7 @@ if more_data.lower() == 'y':
 else:
     more_data=None
 
+#check for more data
 while more_data:
     print("Enter 'general' for data contain \ncumulative player stats\nfull game schedule\nactive player\noverall team standings\nconference team standings\ndivision team standings\nplayoff team standings\nplayer injuries\nlatest updates\n\n")
     print("Or enter 'daily'  for \ndaily_game_schedule\ndaily_player_stats three\nscoreboard\nroster_player\n\n")
@@ -70,14 +100,9 @@ for a in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
         NBA_teams_checklist[team_name_abbr]=team_name_and_city
     else:
         pass
-
-
 #create classes for each team
 for key,value in NBA_teams_checklist.items():
     NBA_teams[key]=Team(key,value)
-
-
-
 #populate each team with a complete roster
 for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
     team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['team']['Abbreviation'])
@@ -90,19 +115,13 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     NBA_teams[team_name_abbr].add_players_roster(FullName)
     #populate the player class
     NBA_teams[team_name_abbr].add_players_class(FirstName,LastName,player_points_per_game,player_position)
-
-
 #NBA_teams['BOS'].print_roster()   //print roster
 #NBA_teams['CLE'].print_player_points_helper("Kevin Love")      //print points by passing a name
 #NBA_teams['GSW'].team_theorical_points() 
 
+ranking()
 
 
-############################# ranking###################
-for y in NBA_teams_checklist:
-    Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_team_theorical_points()
 
-ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
-for key, value in ranking_descending.items() :
-    print (key, value)
-############################################
+
+
