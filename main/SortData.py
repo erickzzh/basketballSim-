@@ -100,5 +100,5 @@ ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,defensive_efficiency,NBA_teams,NBA_teams_checklist)
 #NBA_teams['BOS'].change_effeiciency()
-
+four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
 

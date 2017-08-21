@@ -62,3 +62,47 @@ def off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,d
     plt.ylabel("defensive efficiency")
     plt.title("efficiency plot")
     plt.show()
+
+#finds the 'four factors' that typically correspond to wins/losses in the NBA
+def four_factors(NBA_teams, NBA_teams_checklist, overall_team_standings):
+    effective_field_goal_percentage = {}
+    turnover_rate = {}
+    offensive_rebounding_percentage = {}
+    free_throw_rate = {}
+
+    for b in range(0,len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
+
+        #reading in data from JSON
+        field_goal_attempts = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['FgAttPerGame']['#text'])
+        field_goals_made = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['FgMadePerGame']['#text'])
+        treys_made = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['Fg3PtMadePerGame']['#text'])
+        turnovers = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['TovPerGame']['#text'])
+        free_throw_attempts = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['FtAttPerGame']['#text'])
+        free_throws_made = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['FtMadePerGame']['#text'])
+        offensive_rebounds = float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['OffRebPerGame']['#text'])
+        
+
+        #Calculating Effective Field Goal Percentage = (Field Goals Made) + 0.5*3P Field Goals Made))/(Field Goal Attempts)
+        effective_field_goal_percentage[team_name_abbr] = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100
+
+        #Calculating Turnover Rate = Turnovers/(Field Goal Attempts + 0.44*Free Throw Attempts + Turnovers)
+        turnover_rate[team_name_abbr] = turnovers / (field_goal_attempts + 0.44 * free_throw_attempts + turnovers)
+
+        #Calculating Offensive Rebounding Percentage = (Offensive Rebounds)/[(Offensive Rebounds)+(Opponent's Defensive Rebounds)]
+        #offensive_rebounding_percentage[team_name_abbr] = offensive_rebounds / (offensive_rebounds + )
+        
+        #Calculating Free Throw Rate=(Free Throws Made)/(Field Goals Attempted) or Free Throws Attempted/Field Goals Attempted
+        free_throw_rate[team_name_abbr] = free_throws_made / field_goal_attempts
+
+        print("Team: %s, Effective FG %%: %.2f, Turnover Rate: %.2f, Free Throw Rate: %.2f" % (team_name_abbr, 
+                                                                                               effective_field_goal_percentage[team_name_abbr], 
+                                                                                               turnover_rate[team_name_abbr], 
+                                                                                               free_throw_rate[team_name_abbr]))
+    # end of for loop
+
+    #update NBA_teams objects with the calculated values
+    for key, value in NBA_teams_checklist.items():
+        NBA_teams[key].effective_field_goal_percentage = effective_field_goal_percentage[key]
+        NBA_teams[key].turnover_rate = turnover_rate[key]
+        NBA_teams[key].free_throw_rate = free_throw_rate[key]
