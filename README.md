@@ -3,11 +3,11 @@
 this program is compatiable with python 3.5 and above
 1.  install python wrapper for non-commercial use
 ```
-$ pip install ohmysportsfeedspy
+$ python3 -m pip install ohmysportsfeedspy
 
-$ pip install matplotlib
+$ python3 -m pip install matplotlib
 
-$ pip install pandas
+$ python3 -m pip install pandas
 ```
 add 
 ```
