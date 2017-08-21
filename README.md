@@ -1,5 +1,6 @@
 # basketballSim-
 
+this program is compatiable with python 3.5 and above
 1.  install python wrapper for non-commercial use
 ```
 $ pip install ohmysportsfeedspy
@@ -17,7 +18,7 @@ add
             filename += "-" + params["team"]
 ```
 under FILE v1_0.py FUNCTION  __make_output_filename
-
+/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/ohmysportsfeeds
 
 2. go to https://www.mysportsfeeds.com/login and register a username and password
 3. type in the username and password into the username_password.py file
