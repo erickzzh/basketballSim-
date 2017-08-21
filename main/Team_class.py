@@ -1,17 +1,18 @@
 from Player_class import * 
 
 class Team:
-	team_name_abbr="DEFAULT"
-	team_name="DEFAULT"
-
-	
-
 	def __init__(self,team_name_abbr,team_name):
 		self.team_name_abbr=team_name_abbr
 		self.team_name=team_name
 		#if this is decleared outside then the roster list is shared with the other instances in this case it is not
 		self.roster=[]
 		self.roster_class={}
+		self.offensive_efficiency=0
+		self.defensive_efficiency=0
+		self.positions_per_game=0
+
+
+
 
 	def print_roster(self):
 		print (self.roster)
@@ -59,6 +60,7 @@ class Team:
 			team_total_points=round(team_total_points,2)
 		return team_total_points
 
-
+	def change_effeiciency(self):
+		self.offensive_efficiency=99999
 
 

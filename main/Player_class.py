@@ -1,11 +1,4 @@
 class Player:
-	FirstName="DEFAULT"
-	LastName="DEFAULT"
-	FullName=FirstName + LastName
-	Position="DEFAULT"
-	points_per_game=0
-	
-
 	def __init__(self,FirstName,LastName,Position,points_per_game):
 		self.FirstName=FirstName
 		self.LastName=LastName
