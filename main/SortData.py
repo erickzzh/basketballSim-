@@ -55,7 +55,7 @@ def trade_player():
 # #############################ranking###################
 def ranking_points_per_game():
     for y in NBA_teams_checklist:
-        Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_team_theorical_points()
+        Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_team_theoretical_points()
     #rank by value 
     ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
     for key, value in ranking_descending.items() :
@@ -155,9 +155,9 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     NBA_teams[team_name_abbr].add_players_class(FirstName,LastName,player_points_per_game,player_position)
 #NBA_teams['BOS'].print_roster()   //print roster
 #NBA_teams['CLE'].print_player_points_helper("Kevin Love")      //print points by passing a name
-#NBA_teams['GSW'].team_theorical_points() 
+#NBA_teams['GSW'].team_theoretical_points() 
 #####################################################################################################################
-
+ranking_points_per_game()
 
 #NBA_teams['BOS'].change_effeiciency()
 

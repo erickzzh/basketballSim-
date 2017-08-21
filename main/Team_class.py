@@ -45,15 +45,15 @@ class Team:
 
 
 
-#calculates the team theorical points if everyone plays
-	def print_team_theorical_points(self):
+#calculates the team theoretical points if everyone plays
+	def print_team_theoretical_points(self):
 		team_total_points=0.0
 		for x in self.roster:
 			team_total_points=team_total_points+self.roster_class[x].get_points()
 		print("%0.2f" % team_total_points)
 		return team_total_points
 
-	def get_team_theorical_points(self):
+	def get_team_theoretical_points(self):
 		team_total_points=0.0
 		for x in self.roster:
 			team_total_points=team_total_points+self.roster_class[x].get_points()

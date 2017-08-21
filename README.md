@@ -3,6 +3,10 @@
 1.  install python wrapper for non-commercial use
 ```
 $ pip install ohmysportsfeedspy
+
+$ pip install matplotlib
+
+$ pip install pandas
 ```
 add 
 ```
