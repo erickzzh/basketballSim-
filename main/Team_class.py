@@ -41,7 +41,9 @@ class Team:
 
 	def add_player(self, player):
 		self.roster_class[player.get_full_name()] = player
-		print("%s, PPG: %.2f" % (self.roster_class[player.get_full_name()].get_full_name(), self.roster_class[player.get_full_name()].get_points()))
+		print("%s, PPG: %.2f, Effective FG%%: %.2f" % (self.roster_class[player.get_full_name()].get_full_name(), 
+								self.roster_class[player.get_full_name()].get_points(),
+								self.roster_class[player.get_full_name()].get_effective_field_goal_percentage()))
 
 	def print_player_points_helper(self,player_name):
 		self.roster_class[player_name].print_points_per_game()
