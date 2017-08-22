@@ -2,7 +2,7 @@ from getData import *
 from Team_class import *
 import os
 from helper import *
-
+from PlayerStatsHelper import *
 
 NBA_teams_checklist={}
 NBA_teams={}
@@ -79,16 +79,19 @@ for key,value in NBA_teams_checklist.items():
 
 #populate each team with a complete roster
 for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
-    team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['team']['Abbreviation'])
-    FirstName=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['player']['FirstName'] + " ")
-    LastName=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['player']['LastName'])
-    FullName=FirstName+LastName
-    player_position=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['player']['Position'])
-    player_points_per_game=float(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]['stats']['PtsPerGame']['#text'])
+    base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
+    raw_stats = base['stats']
+    raw_player = base['player']
+    team_name_abbr = str(base['team']['Abbreviation'])
+    #generate the player object and relevant stats
+    player = PlayerManager.make_player(raw_player)
+    PlayerManager.stats_filler(raw_stats, player)
+
     #populate the roster
-    NBA_teams[team_name_abbr].add_players_roster(FullName)
+    NBA_teams[team_name_abbr].add_players_roster(player.FullName)
     #populate the player class
-    NBA_teams[team_name_abbr].add_players_class(FirstName,LastName,player_points_per_game,player_position)
+    NBA_teams[team_name_abbr].add_player(player)
+
 #NBA_teams['BOS'].print_roster()   //print roster
 #NBA_teams['CLE'].print_player_points_helper("Kevin Love")      //print points by passing a name
 #NBA_teams['GSW'].team_theoretical_points() 
