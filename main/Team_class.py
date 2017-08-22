@@ -10,7 +10,10 @@ class Team:
 		self.offensive_efficiency=0
 		self.defensive_efficiency=0
 		self.positions_per_game=0
-
+		self.effective_field_goal_percentage = 0
+		self.turnover_rate = 0
+		self.offensive_rebounding_percentage = 0
+		self.free_throw_rate = 0
 
 
 
