@@ -39,6 +39,10 @@ class Team:
 		self.roster_class[first_name+last_name]=Player(first_name,last_name,position,points_per_game)
 		
 
+	def add_player(self, player):
+		self.roster_class[player.get_full_name()] = player
+		print("%s, PPG: %.2f" % (self.roster_class[player.get_full_name()].get_full_name(), self.roster_class[player.get_full_name()].get_points()))
+
 	def print_player_points_helper(self,player_name):
 		self.roster_class[player_name].print_points_per_game()
 

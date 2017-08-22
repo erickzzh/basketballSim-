@@ -5,6 +5,8 @@ class Player:
 		self.FullName=FirstName + LastName
 		self.Position=Position
 		self.points_per_game=points_per_game
+		self.effective_field_goal_percentage = 0
+		self.true_shooting_percentage = 0
 	def print_name(self):
 		print (self.FullName)
 
@@ -16,5 +18,16 @@ class Player:
 
 	def get_points(self):
 		return self.points_per_game
+	
+	def get_full_name(self):
+		return self.FullName
 
+	def set_true_shooting_percentage(self, value):
+		self.true_shooting_percentage = value
+	
+	def set_effective_field_goal_percentage(self, value):
+		self.effective_field_goal_percentage = value
 
+	@classmethod
+	def alt_init(cls, FirstName, LastName, Position):
+		return cls(FirstName,LastName,Position,0)
