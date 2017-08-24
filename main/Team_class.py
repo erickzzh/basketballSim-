@@ -51,8 +51,6 @@ class Team:
 								self.roster_class[player.get_full_name()].get_points(),
 								self.roster_class[player.get_full_name()].get_effective_field_goal_percentage()))
 
-	
-
 	def trade_players_roster(self,leaving_player,coming_player):
 		self.roster=[player.replace(leaving_player,coming_player) for player in self.roster]
 
