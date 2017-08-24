@@ -3,6 +3,7 @@ from pprint import pprint
 import pandas as pandapandapanda
 import matplotlib.pyplot as plt
 from matplotlib import style
+import math
 
 def ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking):
     for y in NBA_teams_checklist:
@@ -106,3 +107,22 @@ def four_factors(NBA_teams, NBA_teams_checklist, overall_team_standings):
         NBA_teams[key].effective_field_goal_percentage = effective_field_goal_percentage[key]
         NBA_teams[key].turnover_rate = turnover_rate[key]
         NBA_teams[key].free_throw_rate = free_throw_rate[key]
+
+def winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings):
+    #assign each team with a winning percentage
+    for b in range(0,len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
+        true_winning_percentage= float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['WinPct']['#text'])
+        NBA_teams[team_name_abbr].winning_percentage=true_winning_percentage
+        print(team_name_abbr,true_winning_percentage)
+    #assign each team with a expected winning percentage against each team in the league
+    for a in NBA_teams_checklist:
+        team_a_winning_pc=NBA_teams[a].winning_percentage
+        for c in NBA_teams_checklist:
+            team_b_winning_pc=NBA_teams[c].winning_percentage
+            if a==0 and b ==0:
+                print("No games yet")
+            else:
+                a_against_b=(team_a_winning_pc-team_a_winning_pc*team_b_winning_pc)/(team_a_winning_pc+team_b_winning_pc-2*team_a_winning_pc*team_b_winning_pc)
+                NBA_teams[a].expected_winning_percentage[c]=abs(a_against_b)
+
