@@ -10,7 +10,12 @@ class PlayerManager:
         first_name = raw_player['FirstName']
         last_name = raw_player['LastName']
         position = raw_player['Position']
-        return Player.alt_init(first_name, last_name, position)
+        player_id = raw_player['ID']
+
+        player = Player.alt_init(first_name, last_name, position)
+        player.set_player_id(player_id)
+
+        return player
 
     @classmethod
     def stats_filler(cls, raw_stats, player):
