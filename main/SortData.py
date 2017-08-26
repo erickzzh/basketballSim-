@@ -9,7 +9,7 @@ NBA_teams={}
 Ranking={}
 offensive_efficiency={}
 defensive_efficiency={}
-
+active_players_list=[]
 
 dir = os.path.dirname(__file__)+'/results/'
 active_players_json=open(dir+'active_players-nba-2016-2017-regular.json').read()
@@ -40,8 +40,13 @@ else:
 for a in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
     team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Abbreviation'])
     team_name_and_city=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['City']+" "+cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Name'])
+    player_name = str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['FirstName']).lower() + "-"
+    player_name = player_name + str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['LastName']).lower() + "-"
+    player_name = player_name + str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['ID'])
     if team_name_abbr not in NBA_teams_checklist.keys():
         NBA_teams_checklist[team_name_abbr]=team_name_and_city
+    elif player_name not in active_players_list:
+        active_players_list.append(player_name)
     else:
         pass
 #check for more data
@@ -63,7 +68,8 @@ while more_data:
         else:
             gamelogs_type=input("Requesting for all players gamelogs?(y/n): ")
             if gamelogs_type.lower()=="y":
-                pass #alex put your player requesting here
+                request_all_player_gamelogs(active_players_list)
+                #pass #alex put your player requesting here
             else:
                 request_gamelogs()
     elif request_type=="game":
