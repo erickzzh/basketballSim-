@@ -9,7 +9,7 @@ NBA_teams={}
 Ranking={}
 offensive_efficiency={}
 defensive_efficiency={}
-active_players_list=[]
+
 
 dir = os.path.dirname(__file__)+'/results/'
 active_players_json=open(dir+'active_players-nba-2016-2017-regular.json').read()
@@ -40,13 +40,8 @@ else:
 for a in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
     team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Abbreviation'])
     team_name_and_city=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['City']+" "+cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Name'])
-    player_name = str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['FirstName']).lower() + "-"
-    player_name = player_name + str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['LastName']).lower() + "-"
-    player_name = player_name + str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['ID'])
     if team_name_abbr not in NBA_teams_checklist.keys():
         NBA_teams_checklist[team_name_abbr]=team_name_and_city
-    elif player_name not in active_players_list:
-        active_players_list.append(player_name)
     else:
         pass
 #check for more data
@@ -68,8 +63,7 @@ while more_data:
         else:
             gamelogs_type=input("Requesting for all players gamelogs?(y/n): ")
             if gamelogs_type.lower()=="y":
-                request_all_player_gamelogs(active_players_list)
-                #pass #alex put your player requesting here
+                pass #alex put your player requesting here
             else:
                 request_gamelogs()
     elif request_type=="game":
@@ -106,6 +100,7 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     #populate the player class
     NBA_teams[team_name_abbr].add_player(player)
 
+assign_teamid(NBA_teams,overall_team_standings)
 #NBA_teams['BOS'].print_roster()   //print roster
 #NBA_teams['CLE'].print_player_points_helper("Kevin Love")      //print points by passing a name
 #NBA_teams['GSW'].team_theoretical_points() 
@@ -121,4 +116,4 @@ four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
 NBA_teams['LAL'].roster_class["IvicaZubac"].set_points_per_game(999999999)
 NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
 winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
-pprint(NBA_teams['BRO'].expected_winning_percentage)
+pprint(NBA_teams['BRO'].teamid)

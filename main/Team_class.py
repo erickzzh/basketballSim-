@@ -2,6 +2,7 @@ from Player_class import *
 
 class Team:
 	def __init__(self,team_name_abbr,team_name):
+		self.teamid=0
 		self.team_name_abbr=team_name_abbr
 		self.team_name=team_name
 		#if this is decleared outside then the roster list is shared with the other instances in this case it is not
@@ -50,6 +51,8 @@ class Team:
 		print("%s, PPG: %.2f, Effective FG%%: %.2f" % (self.roster_class[player.get_full_name()].get_full_name(), 
 								self.roster_class[player.get_full_name()].get_points(),
 								self.roster_class[player.get_full_name()].get_effective_field_goal_percentage()))
+
+	
 
 	def trade_players_roster(self,leaving_player,coming_player):
 		self.roster=[player.replace(leaving_player,coming_player) for player in self.roster]
