@@ -79,7 +79,6 @@ while more_data:
         more_data=None
         
         clear_input()
-
 ##################################populates the roster list as well as creating the team class(including all attributes within the team class)######################
 #create classes for each team
 for key,value in NBA_teams_checklist.items():
