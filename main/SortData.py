@@ -3,6 +3,7 @@ from Team_class import *
 import os
 from helper import *
 from PlayerStatsHelper import *
+from Database import *
 
 NBA_teams_checklist={}
 NBA_teams={}
@@ -85,7 +86,6 @@ while more_data:
         more_data=None
         
         clear_input()
-
 ##################################populates the roster list as well as creating the team class(including all attributes within the team class)######################
 #create classes for each team
 for key,value in NBA_teams_checklist.items():
@@ -124,3 +124,11 @@ NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
 winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
 pprint(NBA_teams['BRO'].teamid)
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
+print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
+
+#database test
+create_table_year()
+create_table_teams()
+create_table_player()
+team_entry()
+player_entry(active_players)
