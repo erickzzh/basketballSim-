@@ -190,12 +190,6 @@ def player_entry(active_players):
                                         startyear))
                 
         year_team_player.commit()
-
-
-
-
-
-
 def grab_data():
 	c.execute('SELECT Firstname FROM player WHERE teamID=01 AND startyear=2016')
 	data=c.fetchall()
