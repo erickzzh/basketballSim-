@@ -6,12 +6,17 @@ class Player:
 		self.FullName=FirstName + LastName
 		self.Position=Position
 		self.points_per_game=points_per_game
+		self.assists_per_game = 0
 		self.effective_field_goal_percentage = 0
 		self.true_shooting_percentage = 0
 		self.field_goal_attempts = 0
 		self.field_goals_made = 0
 		self.free_throw_attempts = 0
+		self.free_throws_made = 0
 		self.treys_made = 0
+		self.off_reb_per_game = 0
+		self.points_produced = 0
+
 	def print_name(self):
 		print (self.FullName)
 
@@ -27,7 +32,10 @@ class Player:
 
 	def get_points(self):
 		return self.points_per_game
-	
+
+	def get_assists_per_game(self):
+		return self.assists_per_game
+
 	def get_full_name(self):
 		return self.FullName
 
@@ -40,6 +48,9 @@ class Player:
 	def get_free_throw_attempts(self):
 		return self.free_throw_attempts
 
+	def get_free_throws_made(self):
+		return self.free_throws_made
+
 	def get_treys_made(self):
 		return self.treys_made
 
@@ -48,6 +59,12 @@ class Player:
 
 	def get_true_shooting_percentage(self):
 		return self.true_shooting_percentage
+
+	def get_off_reb_per_game(self):
+		return self.off_reb_per_game
+
+	def get_points_produced(self):
+		return self.points_produced
 
 	#setters
 	def set_player_id(self,value):
@@ -67,13 +84,24 @@ class Player:
 
 	def set_free_throw_attempts(self,value):
 		self.free_throw_attempts = value
-	
+
+	def set_free_throws_made(self, value):
+		self.free_throws_made = value
+
 	def set_treys_made(self, value):
 		self.treys_made = value
 	
 	def set_points_per_game(self, value):
 		self.points_per_game = value
-	
+
+	def set_assists_per_game(self, value):
+		self.assists_per_game = value
+
+	def set_off_reb_per_game(self, value):
+		self.off_reb_per_game = value
+
+	def set_points_produced(self, value):
+		self.points_produced = value
 	@classmethod
 	def alt_init(cls, FirstName, LastName, Position):
 		return cls(FirstName,LastName,Position,0)
