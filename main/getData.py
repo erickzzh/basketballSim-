@@ -186,7 +186,18 @@ def request_game():
             Data_query.authenticate(authorize.username, authorize.password)
             Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed=data_category,format=file_format,gameid=gameid)#can add more optional params manually 
 
-
+def request_all_player_gamelogs(player_list):
+    initial_inputs()
+    data_category = 'player'
+    for key in player_list:
+        if season_name_type == 'playoff':
+            Data_query = MySportsFeeds('1.0',verbose=True)
+            Data_query.authenticate(authorize.username,authorize.password)
+            Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_type,feed="player_gamelogs",format=file_format,player=key)
+        else:
+            Data_query = MySportsFeeds('1.0',verbose=True)
+            Data_query.authenticate(authorize.username,authorize.password)
+            Output = Data_query.msf_get_data(league=league_name,season=season_name_begin+season_name_end+season_name_type,feed="player_gamelogs",format=file_format,player=key)
 
 
 

@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 import math
 
+def assign_teamid(NBA_teams,overall_team_standings):
+    for b in range(0,len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        teamid=overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['ID']
+        team_name_abbr=overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
+        NBA_teams[team_name_abbr].teamid=teamid
+
 def ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking):
     for y in NBA_teams_checklist:
         Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_team_theoretical_points()

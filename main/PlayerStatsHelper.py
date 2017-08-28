@@ -10,22 +10,33 @@ class PlayerManager:
         first_name = raw_player['FirstName']
         last_name = raw_player['LastName']
         position = raw_player['Position']
-        return Player.alt_init(first_name, last_name, position)
+        player_id = raw_player['ID']
+
+        player = Player.alt_init(first_name, last_name, position)
+        player.set_player_id(player_id)
+
+        return player
 
     @classmethod
     def stats_filler(cls, raw_stats, player):
         """grab statistics from 2016-2017 season for the given player"""
         points_per_game = float(raw_stats['PtsPerGame']['#text'])
+        assists_per_game = float(raw_stats['AstPerGame']['#text'])
         field_goal_attempts = float(raw_stats['FgAttPerGame']['#text'])
         field_goals_made = float(raw_stats['FgMadePerGame']['#text'])
         free_throw_attempts = float(raw_stats['FtAttPerGame']['#text'])
+        free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
         treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
+        off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
 
         player.set_points_per_game(points_per_game)
+        player.set_assists_per_game(assists_per_game)
         player.set_field_goal_attempts(field_goal_attempts)
         player.set_field_goals_made(field_goals_made)
         player.set_free_throw_attempts(free_throw_attempts)
+        player.set_free_throws_made(free_throws_made)
         player.set_treys_made(treys_made)
+        player.set_off_reb_per_game(off_reb_per_game)
 
     @classmethod
     def stat_calculator(cls, player):
@@ -47,7 +58,22 @@ class PlayerManager:
             player.set_effective_field_goal_percentage(effective_field_goal_percentage)
             player.set_true_shooting_percentage(true_shooting_percentage)
 
+            #find the number of points produced per game
+            cls.points_produced(player)
+
         else:
             #avoid division errors, simply set the values to 0
             player.set_effective_field_goal_percentage(0)
             player.set_true_shooting_percentage(0)
+
+    @classmethod
+    def points_produced(cls, player):
+        """ uses per-game averages to calculate points produced per game """
+
+        #Points Produced = (1.45 x FGM) + (2.2 x 3PTM) + FTM + (0.6 * Off. Reb.) + (0.6 * Ast)
+        points_produced = ((1.45 * player.get_field_goals_made()) +
+                           (2.2 * player.get_treys_made()) + player.get_free_throws_made() +
+                           (0.6 * player.get_off_reb_per_game()) +
+                           (0.6 * player.get_assists_per_game()))
+
+        player.set_points_produced(points_produced)

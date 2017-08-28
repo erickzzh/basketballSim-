@@ -99,6 +99,7 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     #populate the player class
     NBA_teams[team_name_abbr].add_player(player)
 
+assign_teamid(NBA_teams,overall_team_standings)
 #NBA_teams['BOS'].print_roster()   //print roster
 #NBA_teams['CLE'].print_player_points_helper("Kevin Love")      //print points by passing a name
 #NBA_teams['GSW'].team_theoretical_points() 
@@ -114,4 +115,5 @@ four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
 NBA_teams['LAL'].roster_class["IvicaZubac"].set_points_per_game(999999999)
 NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
 winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
-pprint(NBA_teams['BRO'].expected_winning_percentage)
+pprint(NBA_teams['BRO'].teamid)
+#pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
