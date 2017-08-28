@@ -25,6 +25,8 @@ playoff_team_standings=json.loads(playoff_team_standings_json)
 
 
 
+
+
 year_team_player =sqlite3.connect("NBA_Database.db")
 #cursor
 c=year_team_player.cursor()
@@ -34,12 +36,46 @@ def create_table_year():
 
 #i have no idea how to split all those params into different lines
 def create_table_teams():
-	c.execute('CREATE TABLE IF NOT EXISTS team(teamID REAL PRIMARY KEY,team_name_abbre TEXT,full_name TEXT,field_goal_attempts REAL,turnovers REAL,freethrow_attempts REAL,offensive_rebonds REAL,points_scored REAL,points_allowed REAL,game_possession REAL,offensive_efficiency REAL,defensive_efficiency REAL,startyear REAL,treys_made REAL,free_throws_made REAL, FOREIGN KEY (startyear) REFERENCES season_year(startyear))')
+	c.execute('''CREATE TABLE IF NOT EXISTS team(teamID REAL PRIMARY KEY,
+                                                    team_name_abbre TEXT,
+                                                    full_name TEXT,
+                                                    field_goal_attempts REAL,
+                                                    turnovers REAL,
+                                                    freethrow_attempts REAL,
+                                                    offensive_rebonds REAL,
+                                                    points_scored REAL,
+                                                    points_allowed REAL,
+                                                    game_possession REAL,
+                                                    offensive_efficiency REAL,
+                                                    defensive_efficiency REAL,
+                                                    treys_made REAL,
+                                                    free_throws_made REAL, 
+                                                    startyear REAL,
+                                                    FOREIGN KEY (startyear) REFERENCES season_year(startyear)ON DELETE SET NULL)''')
 
 
 
 def create_table_player():
-	c.execute('CREATE TABLE IF NOT EXISTS player(playerID REAL PRIMARY KEY,Firstname TEXT,Lastname TEXT,teamID REAL, FOREIGN KEY (teamID) REFERENCES team(teamID) ON DELETE SET NULL)')
+	c.execute('''CREATE TABLE IF NOT EXISTS player(playerID REAL PRIMARY KEY,
+                                                    Firstname TEXT,
+                                                    Lastname TEXT,
+                                                    Fullname TEXT,
+                                                    position TEXT,
+                                                    points_per_game REAL,
+                                                    assists_per_game REAL,
+                                                    effective_field_goal_percentage REAL,
+                                                    true_shooting_percentage REAL,
+                                                    field_goal_attempts REAL,
+                                                    field_goals_made REAL,
+                                                    free_throw_attempts REAL,
+                                                    free_throws_made REAL,
+                                                    treys_made REAL,
+                                                    off_reb_per_game REAL,
+                                                    points_produced REAL,
+                                                    teamID REAL, 
+                                                    startyear REAL,
+                                                    FOREIGN KEY (teamID) REFERENCES team(teamID) ON DELETE SET NULL,
+                                                    FOREIGN KEY (startyear) REFERENCES season_year(startyear) ON DELETE SET NULL)''')
 
 
 
@@ -87,6 +123,74 @@ def team_entry():
 
 
 
+def player_entry(active_players):
+    for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
+        base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
+        raw_stats = base['stats']
+        raw_player = base['player']
+        fitsname = raw_player['FirstName']
+        lastname = raw_player['LastName']
+        full_name = fitsname+" "+lastname
+        position = raw_player['Position']
+        playerid = raw_player['ID']
+        teamID = base['team']['ID']
+        team_name_abbr = str(base['team']['Abbreviation'])
+        points_per_game = float(raw_stats['PtsPerGame']['#text'])
+        assists_per_game = float(raw_stats['AstPerGame']['#text'])
+        field_goal_attempts = float(raw_stats['FgAttPerGame']['#text'])
+        field_goals_made = float(raw_stats['FgMadePerGame']['#text'])
+        free_throw_attempts = float(raw_stats['FtAttPerGame']['#text'])
+        free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
+        treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
+        off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
+        if free_throw_attempts > 0:
+            effective_field_goal_percentage = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100.0
+            true_shooting_percentage = points_per_game / (2.0 * (field_goal_attempts + 0.44 * free_throw_attempts)) * 100.0
+        points_produced = ((1.45 * field_goals_made) +
+                           (2.2 * treys_made) + free_throws_made +
+                           (0.6 * off_reb_per_game) +
+                           (0.6 * assists_per_game))
+        startyear=2016
+        c.execute('''INSERT INTO player(playerID,
+                                        Firstname,
+                                        Lastname,
+                                        Fullname,
+                                        position,
+                                        points_per_game,
+                                        assists_per_game,
+                                        effective_field_goal_percentage,
+                                        true_shooting_percentage,
+                                        field_goal_attempts,
+                                        field_goals_made,
+                                        free_throw_attempts,
+                                        free_throws_made,
+                                        treys_made,
+                                        off_reb_per_game,
+                                        points_produced,
+                                        teamID, 
+                                        startyear
+                                                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                        (playerid,
+                                        fitsname,
+                                        lastname,
+                                        full_name,
+                                        position,
+                                        points_per_game,
+                                        assists_per_game,
+                                        effective_field_goal_percentage,
+                                        true_shooting_percentage,
+                                        field_goal_attempts,
+                                        field_goals_made,
+                                        free_throw_attempts,
+                                        free_throws_made,
+                                        treys_made,
+                                        off_reb_per_game,
+                                        points_produced,
+                                        teamID,
+                                        startyear))
+                
+        year_team_player.commit()
+
 
 
 
@@ -96,8 +200,5 @@ def grab_data():
 	c.execute('SELECT Firstname FROM player WHERE teamID=01 AND startyear=2016')
 	data=c.fetchall()
 	print(data)
-create_table_year()
-create_table_teams()
-create_table_player()
-team_entry()
+
 #data_entry()
