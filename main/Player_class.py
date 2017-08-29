@@ -20,13 +20,13 @@ class Player:
 		self.points_produced = 0
 
 	def print_name(self):
-		print self.FullName
+		print (self.FullName)
 
 	def print_points_per_game(self):
-		print self.points_per_game
+		print (self.points_per_game)
 
 	def print_position(self):
-		print self.Position
+		print (self.Position)
 
 	#getters
 	def get_player_id(self):

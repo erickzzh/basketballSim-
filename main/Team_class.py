@@ -25,17 +25,17 @@ class Team:
 
 #printer
 	def print_roster(self):
-		print self.roster
+		print (self.roster)
 
 	def print_roster_and_points(self):
 		for i in self.roster_class:
 			print (i, self.roster_class[i].points_per_game)
 
 	def print_team_name_abbr(self):
-		print self.team_name_abbr
+		print (self.team_name_abbr)
 
 	def print_team_name(self):
-		print self.team_name
+		print (self.team_name)
 
 	def print_player_points_helper(self, player_name):
 		self.roster_class[player_name].print_points_per_game()
@@ -45,12 +45,12 @@ class Team:
 		for x in self.roster:
 			team_total_points = team_total_points + self.roster_class[x].get_points()
 
-		print "%0.2f" % team_total_points
+		print ("%0.2f" % team_total_points)
 
 		return team_total_points
 
 	def print_team_winning_percentage(self):
-		print self.winning_percentage
+		print (self.winning_percentage)
 
 #first create a complete roster in the list roster[]
 	def add_players_roster(self, players):

@@ -196,7 +196,7 @@ def grab_data():
     '''obtain data for testing purposes'''
     c.execute('SELECT Firstname FROM player WHERE teamID=01 AND startyear=2016')
     data = c.fetchall()
-    print data
+    print (data)
 
 def trade_player_db(firstPlayer, secondPlayer):
     '''performs the necessary updates to the players table to perform a trade'''
