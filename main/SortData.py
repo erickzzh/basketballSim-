@@ -97,10 +97,12 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     raw_stats = base['stats']
     raw_player = base['player']
     team_name_abbr = str(base['team']['Abbreviation'])
+    team_id = base['team']['ID']
     #generate the player object and relevant stats
     player = PlayerManager.make_player(raw_player)
     PlayerManager.stats_filler(raw_stats, player)
     PlayerManager.stat_calculator(player)
+    player.set_team_id(team_id)
     #populate the roster
     NBA_teams[team_name_abbr].add_players_roster(player.FullName)
     #populate the player class
@@ -119,8 +121,8 @@ off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,defen
 #NBA_teams['BOS'].change_effeiciency()
 four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
 #access players
-NBA_teams['LAL'].roster_class["IvicaZubac"].set_points_per_game(999999999)
-NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
+#NBA_teams['LAL'].roster_class["IvicaZubac"].set_points_per_game(999999999)
+#NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
 winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
 pprint(NBA_teams['BRO'].teamid)
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
@@ -132,3 +134,7 @@ create_table_teams()
 create_table_player()
 team_entry()
 player_entry(active_players)
+
+# @ERICK: uncomment later to test trade and re-ordering of teams
+#trade_player(NBA_teams,NBA_teams_checklist)
+#ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)

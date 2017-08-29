@@ -1,6 +1,7 @@
 class Player:
 	def __init__(self,FirstName,LastName,Position,points_per_game):
 		self.player_id = 0
+		self.team_id = 0
 		self.FirstName=FirstName
 		self.LastName=LastName
 		self.FullName=FirstName + LastName
@@ -29,6 +30,9 @@ class Player:
 	#getters
 	def get_player_id(self):
 		return self.player_id
+
+	def get_team_id(self):
+		return self.team_id
 
 	def get_points(self):
 		return self.points_per_game
@@ -69,7 +73,10 @@ class Player:
 	#setters
 	def set_player_id(self,value):
 		self.player_id = value
-	
+
+	def set_team_id(self, value):
+		self.team_id = value
+
 	def set_true_shooting_percentage(self, value):
 		self.true_shooting_percentage = value
 	

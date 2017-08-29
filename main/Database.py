@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import json
+from Player_class import Player
 
 dir = os.path.dirname(__file__)+'/results/'
 active_players_json=open(dir+'active_players-nba-2016-2017-regular.json').read()
@@ -195,4 +196,13 @@ def grab_data():
 	data=c.fetchall()
 	print(data)
 
+def trade_player_db(firstPlayer,secondPlayer):
+    original_first_team = str(firstPlayer.get_team_id())
+    original_second_team = str(secondPlayer.get_team_id())
+    #trade first player to second's team
+    c.execute('UPDATE player SET teamID = ' + original_second_team + ' WHERE playerID = ' + str(firstPlayer.get_player_id()))
+
+    #trade second player to first's team
+    c.execute('UPDATE player SET teamID = ' + original_first_team + ' WHERE playerID = ' + str(secondPlayer.get_player_id()))
+    year_team_player.commit()
 #data_entry()
