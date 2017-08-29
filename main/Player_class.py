@@ -1,12 +1,13 @@
 class Player:
-	def __init__(self,FirstName,LastName,Position,points_per_game):
+	'''Instances of this class hold data from the players table for easier interaction'''
+	def __init__(self, FirstName, LastName, Position, points_per_game):
 		self.player_id = 0
 		self.team_id = 0
-		self.FirstName=FirstName
-		self.LastName=LastName
-		self.FullName=FirstName + LastName
-		self.Position=Position
-		self.points_per_game=points_per_game
+		self.FirstName = FirstName
+		self.LastName = LastName
+		self.FullName = FirstName + LastName
+		self.Position = Position
+		self.points_per_game = points_per_game
 		self.assists_per_game = 0
 		self.effective_field_goal_percentage = 0
 		self.true_shooting_percentage = 0
@@ -19,13 +20,13 @@ class Player:
 		self.points_produced = 0
 
 	def print_name(self):
-		print (self.FullName)
+		print self.FullName
 
 	def print_points_per_game(self):
-		print (self.points_per_game)
+		print self.points_per_game
 
 	def print_position(self):
-		print(self.Position)
+		print self.Position
 
 	#getters
 	def get_player_id(self):
@@ -71,7 +72,7 @@ class Player:
 		return self.points_produced
 
 	#setters
-	def set_player_id(self,value):
+	def set_player_id(self, value):
 		self.player_id = value
 
 	def set_team_id(self, value):
@@ -79,17 +80,17 @@ class Player:
 
 	def set_true_shooting_percentage(self, value):
 		self.true_shooting_percentage = value
-	
+
 	def set_effective_field_goal_percentage(self, value):
 		self.effective_field_goal_percentage = value
 
-	def set_field_goal_attempts(self,value):
+	def set_field_goal_attempts(self, value):
 		self.field_goal_attempts = value
-	
-	def set_field_goals_made(self,value):
+
+	def set_field_goals_made(self, value):
 		self.field_goals_made = value
 
-	def set_free_throw_attempts(self,value):
+	def set_free_throw_attempts(self, value):
 		self.free_throw_attempts = value
 
 	def set_free_throws_made(self, value):
@@ -97,7 +98,7 @@ class Player:
 
 	def set_treys_made(self, value):
 		self.treys_made = value
-	
+
 	def set_points_per_game(self, value):
 		self.points_per_game = value
 
@@ -111,4 +112,4 @@ class Player:
 		self.points_produced = value
 	@classmethod
 	def alt_init(cls, FirstName, LastName, Position):
-		return cls(FirstName,LastName,Position,0)
+		return cls(FirstName, LastName, Position, 0)
