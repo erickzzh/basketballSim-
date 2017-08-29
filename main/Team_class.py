@@ -17,6 +17,9 @@ class Team:
 		self.offensive_rebounding_percentage = 0
 		self.free_throw_rate = 0
 		self.winning_percentage=0
+		self.game_schedule=[]
+		self.sim_win=0
+		self.sim_FAT_L=0
 
 
 #printer
@@ -69,6 +72,11 @@ class Team:
 			team_total_points=team_total_points+self.roster_class[x].get_points()
 			team_total_points=round(team_total_points,2)
 		return team_total_points
+
+	def get_sim_win(self):
+		return self.sim_win
+	def get_sim_FAT_L(self):
+		return self.sim_FAT_L
 
 	def change_effeiciency(self):
 		self.offensive_efficiency=99999
