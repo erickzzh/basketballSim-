@@ -4,6 +4,7 @@ import pandas as pandapandapanda
 import matplotlib.pyplot as plt
 from matplotlib import style
 import math
+import numpy as np
 from Database import *
 
 def assign_teamid(NBA_teams,overall_team_standings):
@@ -19,6 +20,40 @@ def ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking):
     ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
     for key, value in ranking_descending.items() :
         print (key, value)
+
+def get_each_team_schedule(NBA_teams,full_game_schedule):
+    for b in range(0,len(full_game_schedule["fullgameschedule"]["gameentry"])):
+        base = full_game_schedule["fullgameschedule"]["gameentry"][b]
+        homeTeam = base['homeTeam']['Abbreviation']
+        awayTeam = base['awayTeam']['Abbreviation']
+        NBA_teams[homeTeam].game_schedule.append(awayTeam)
+        NBA_teams[awayTeam].game_schedule.append(homeTeam)
+
+
+
+def ranking(NBA_teams,NBA_teams_checklist,Ranking):
+    for b in range(0,len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
+        for a in range(0,len(NBA_teams[team_name_abbr].game_schedule)):
+            opponent = NBA_teams[team_name_abbr].game_schedule[a]
+            #remove team from the opponent's game schedule
+            while team_name_abbr in NBA_teams[opponent].game_schedule: NBA_teams[opponent].game_schedule.remove(team_name_abbr) 
+            expected_winning_percentage = NBA_teams[team_name_abbr].expected_winning_percentage[opponent]
+            temp_array = [team_name_abbr , opponent]
+            winning_team = np.random.choice(temp_array, 1, p=[expected_winning_percentage,1-expected_winning_percentage])
+            if winning_team[0] == team_name_abbr:
+                NBA_teams[team_name_abbr].sim_win += 1 
+                NBA_teams[opponent].sim_FAT_L += 1
+            else:
+                NBA_teams[opponent].sim_win += 1 
+                NBA_teams[team_name_abbr].sim_FAT_L += 1      
+
+    for y in NBA_teams_checklist:
+        Ranking[NBA_teams[y].team_name]= NBA_teams[y].get_sim_win()
+    #rank by value 
+    ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
+    for key, value in ranking_descending.items() :
+        print (key, value,"-",82-value)
 
 def trade_player(NBA_teams,NBA_teams_checklist):
     pprint(NBA_teams_checklist)
@@ -150,7 +185,7 @@ def winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings):
         team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
         true_winning_percentage= float(overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']['WinPct']['#text'])
         NBA_teams[team_name_abbr].winning_percentage=true_winning_percentage
-        print(team_name_abbr,true_winning_percentage)
+        #print(team_name_abbr,true_winning_percentage)
     #assign each team with a expected winning percentage against each team in the league
     for a in NBA_teams_checklist:
         team_a_winning_pc=NBA_teams[a].winning_percentage

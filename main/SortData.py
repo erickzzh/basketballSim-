@@ -124,17 +124,17 @@ four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
 #NBA_teams['LAL'].roster_class["IvicaZubac"].set_points_per_game(999999999)
 #NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
 winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
-pprint(NBA_teams['BRO'].teamid)
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
-print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
+# print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
-#database test
-create_table_year()
-create_table_teams()
-create_table_player()
-team_entry()
-player_entry(active_players)
-
+# #database test
+# create_table_year()
+# create_table_teams()
+# create_table_player()
+# team_entry()
+# player_entry(active_players)
+get_each_team_schedule(NBA_teams,full_game_schedule)
+ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)
 #ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
