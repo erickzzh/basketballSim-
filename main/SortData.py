@@ -31,7 +31,7 @@ full_game_schedule=json.loads(full_game_schedule_json)
 overall_team_standings=json.loads(overall_team_standings_json)
 player_injuries=json.loads(player_injuries_json)
 playoff_team_standings=json.loads(playoff_team_standings_json)
-
+player_list = []
 more_data=input("Enter data(Y/N): ")
 if more_data.lower() == 'y':
     more_data=True
@@ -41,10 +41,15 @@ else:
 for a in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
     team_name_abbr=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Abbreviation'])
     team_name_and_city=str(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['City']+" "+cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['team']['Name'])
+    nameFormat = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['FirstName'] + '-'
+    nameFormat += cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['LastName'] + '-'
+    nameFormat += cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][a]['player']['ID']
     if team_name_abbr not in NBA_teams_checklist.keys():
         NBA_teams_checklist[team_name_abbr]=team_name_and_city
     else:
         pass
+    if nameFormat not in player_list:
+        player_list.append(nameFormat)
 #check for more data
 while more_data:
     print("Enter 'general' for data contain \ncumulative player stats\nfull game schedule\nactive player\noverall team standings\nconference team standings\ndivision team standings\nplayoff team standings\nplayer injuries\nlatest updates\n\n")
@@ -64,7 +69,8 @@ while more_data:
         else:
             gamelogs_type=input("Requesting for all players gamelogs?(y/n): ")
             if gamelogs_type.lower()=="y":
-                pass #alex put your player requesting here
+                request_all_player_gamelogs(player_list)
+                #pass #alex put your player requesting here
             else:
                 request_gamelogs()
     elif request_type=="game":
