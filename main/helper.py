@@ -4,6 +4,7 @@ import pandas as pandapandapanda
 import matplotlib.pyplot as plt
 from matplotlib import style
 import math
+from Database import *
 
 def assign_teamid(NBA_teams,overall_team_standings):
     for b in range(0,len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
@@ -22,19 +23,48 @@ def ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking):
 def trade_player(NBA_teams,NBA_teams_checklist):
     pprint(NBA_teams_checklist)
     team1=input("Which team? (enter abbre only) : ").upper()
-    NBA_teams[team1].print_roster_and_points()
+    team_one = NBA_teams[team1]
+    team_one.print_roster_and_points()
+    #NBA_teams[team1].print_roster_and_points()
+
     player1=input("Which player? (enter Full name including upper case and space) : ")#will change later
     pprint(NBA_teams_checklist)
+
     team2=input("Which team? (enter abbre only) : ").upper()
-    NBA_teams[team2].print_roster_and_points()
+    team_two = NBA_teams[team2]
+    #NBA_teams[team2].print_roster_and_points()
+    team_two.print_roster_and_points()
+
     player2=input("Which player? (enter Full name including upper case and space) : ")#will change later
-    NBA_teams[team1].trade_players_roster(player1,player2)
-    NBA_teams[team2].trade_players_roster(player2,player1)
-    TEMP=NBA_teams[team1].roster_class[player1]
-    NBA_teams[team1].roster_class[player1]=NBA_teams[team2].roster_class[player2]
-    NBA_teams[team1].roster_class[player2]=NBA_teams[team1].roster_class.pop(player1)
-    NBA_teams[team2].roster_class[player2]=TEMP
-    NBA_teams[team2].roster_class[player1]=NBA_teams[team2].roster_class.pop(player2)
+    #NBA_teams[team1].trade_players_roster(player1,player2)
+    team_one.trade_players_roster(player1, player2)
+    #NBA_teams[team2].trade_players_roster(player2,player1)
+    team_two.trade_players_roster(player2, player1)
+
+    player_one_object = team_one.roster_class[player1]
+    player_two_object = team_two.roster_class[player2]
+
+    #new trade stuff
+    team_one.roster_class[player1] = player_two_object
+    team_one.roster_class[player2] = team_one.roster_class.pop(player1)
+    team_two.roster_class[player2] = player_one_object
+    team_two.roster_class[player1] = team_two.roster_class.pop(player2)
+
+    print('after the trade:\n')
+    print(team1 + '\n')
+    team_one.print_roster_and_points()
+    print('\n' + team2 + '\n')
+    team_two.print_roster_and_points()
+    print ('\n')
+    #update the actual database
+    trade_player_db(player_one_object, player_two_object)
+
+    #old trade stuff
+    # TEMP=NBA_teams[team1].roster_class[player1]
+    # NBA_teams[team1].roster_class[player1]=NBA_teams[team2].roster_class[player2]
+    # NBA_teams[team1].roster_class[player2]=NBA_teams[team1].roster_class.pop(player1)
+    # NBA_teams[team2].roster_class[player2]=TEMP
+    # NBA_teams[team2].roster_class[player1]=NBA_teams[team2].roster_class.pop(player2)
 
 def off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,defensive_efficiency,NBA_teams,NBA_teams_checklist):
     #offensive efficiency and defensive efficiency 
