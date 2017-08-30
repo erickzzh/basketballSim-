@@ -5,7 +5,7 @@ class Player:
 		self.team_id = 0
 		self.FirstName = FirstName
 		self.LastName = LastName
-		self.FullName = FirstName + LastName
+		self.FullName = FirstName + " " + LastName
 		self.Position = Position
 		self.points_per_game = points_per_game
 		self.assists_per_game = 0
@@ -18,6 +18,9 @@ class Player:
 		self.treys_made = 0
 		self.off_reb_per_game = 0
 		self.points_produced = 0
+		self.player_usage = 0
+		self.turnover = 0
+		self.minutes = 0
 
 	def print_name(self):
 		print (self.FullName)
@@ -71,6 +74,15 @@ class Player:
 	def get_points_produced(self):
 		return self.points_produced
 
+	def get_player_usage(self):
+		return self.player_usage
+
+	def get_player_turnover(self):
+		return self.turnover
+
+	def get_player_minutes(self):
+		return self.minutes
+
 	#setters
 	def set_player_id(self, value):
 		self.player_id = value
@@ -110,6 +122,15 @@ class Player:
 
 	def set_points_produced(self, value):
 		self.points_produced = value
+
+	def set_player_usage(self,value):
+		self.player_usage = value
+
+	def set_turnover(self,value):
+		self.turnover = value
+
+	def set_minutes(self,value):
+		self.minutes = value
 	@classmethod
 	def alt_init(cls, FirstName, LastName, Position):
 		return cls(FirstName, LastName, Position, 0)

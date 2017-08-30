@@ -102,6 +102,8 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     player = PlayerManager.make_player(raw_player)
     PlayerManager.stats_filler(raw_stats, player)
     PlayerManager.stat_calculator(player)
+    team_basic_stats_filler(NBA_teams, overall_team_standings)
+    PlayerManager.usage(player,raw_stats,NBA_teams,team_name_abbr)
     player.set_team_id(team_id)
     #populate the roster
     NBA_teams[team_name_abbr].add_players_roster(player.FullName)
@@ -127,12 +129,12 @@ winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
 # print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
-# #database test
-# create_table_year()
-# create_table_teams()
-# create_table_player()
-# team_entry()
-# player_entry(active_players)
+#database test
+create_table_year()
+create_table_teams()
+create_table_player()
+team_entry()
+player_entry(active_players)
 get_each_team_schedule(NBA_teams,full_game_schedule)
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams

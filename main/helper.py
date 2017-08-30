@@ -155,7 +155,13 @@ def four_factors(NBA_teams, NBA_teams_checklist, overall_team_standings):
         free_throw_attempts = float(base_stats['FtAttPerGame']['#text'])
         free_throws_made = float(base_stats['FtMadePerGame']['#text'])
         offensive_rebounds = float(base_stats['OffRebPerGame']['#text'])
-        
+        turnover = float(base_stats['TovPerGame']['#text'])
+
+        #set field_goal_attempts,free_throw_attempts,turnover into team stats
+        NBA_teams[team_name_abbr].set_field_goal_attempts(field_goal_attempts)
+        NBA_teams[team_name_abbr].set_free_throw_attempts(free_throw_attempts)
+        NBA_teams[team_name_abbr].set_turnover(turnover)
+
         #Calculating Effective Field Goal Percentage = (Field Goals Made) + 0.5*3P Field Goals Made))/(Field Goal Attempts)
         effective_field_goal_percentage[team_name_abbr] = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100
 
@@ -180,7 +186,9 @@ def four_factors(NBA_teams, NBA_teams_checklist, overall_team_standings):
         NBA_teams[key].turnover_rate = turnover_rate[key]
         NBA_teams[key].free_throw_rate = free_throw_rate[key]
 
+
 def winning_percentage(NBA_teams, NBA_teams_checklist, overall_team_standings):
+    '''this function is to support the player usage function'''
     #assign each team with a winning percentage
     for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
@@ -199,4 +207,22 @@ def winning_percentage(NBA_teams, NBA_teams_checklist, overall_team_standings):
             else:
                 a_against_b = (team_a_winning_pc-team_a_winning_pc*team_b_winning_pc)/(team_a_winning_pc+team_b_winning_pc-2*team_a_winning_pc*team_b_winning_pc)
                 NBA_teams[a].expected_winning_percentage[c] = abs(a_against_b)
+
+def team_basic_stats_filler(NBA_teams, overall_team_standings):
+
+    for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        base_team = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']
+        base_stats = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']
+        team_name_abbr = base_team['Abbreviation']
+
+        #reading in data from JSON
+        field_goal_attempts = float(base_stats['FgAttPerGame']['#text'])
+        turnovers = float(base_stats['TovPerGame']['#text'])
+        free_throw_attempts = float(base_stats['FtAttPerGame']['#text'])
+
+
+        #set field_goal_attempts,free_throw_attempts,turnover into team stats
+        NBA_teams[team_name_abbr].set_field_goal_attempts(field_goal_attempts)
+        NBA_teams[team_name_abbr].set_free_throw_attempts(free_throw_attempts)
+        NBA_teams[team_name_abbr].set_turnover(turnovers)
 
