@@ -35,29 +35,29 @@ def ranking(NBA_teams, NBA_teams_checklist,Ranking):
     for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
         team = NBA_teams[team_name_abbr]
+        for x in range(0,50):
+            for a in range(0, len(team.game_schedule)):
+                opponent = team.game_schedule[a]
+                # #remove team from the opponent's game schedule
+                # while team_name_abbr in NBA_teams[opponent].game_schedule: NBA_teams[opponent].game_schedule.remove(team_name_abbr)
+                expected_winning_percentage = team.expected_winning_percentage[opponent]
+                temp_array = [team_name_abbr, opponent]
+                winning_team = np.random.choice(temp_array, 1, p=[expected_winning_percentage, 1-expected_winning_percentage])
 
-        for a in range(0, len(team.game_schedule)):
-            opponent = team.game_schedule[a]
-            #remove team from the opponent's game schedule
-            while team_name_abbr in NBA_teams[opponent].game_schedule: NBA_teams[opponent].game_schedule.remove(team_name_abbr)
-            expected_winning_percentage = team.expected_winning_percentage[opponent]
-            temp_array = [team_name_abbr, opponent]
-            winning_team = np.random.choice(temp_array, 1, p=[expected_winning_percentage, 1-expected_winning_percentage])
-
-            if winning_team[0] == team_name_abbr:
-                team.sim_win += 1
-                NBA_teams[opponent].sim_FAT_L += 1
-            else:
-                NBA_teams[opponent].sim_win += 1
-                team.sim_FAT_L += 1
+                if winning_team[0] == team_name_abbr:
+                    team.sim_win += 1
+                    NBA_teams[opponent].sim_FAT_L += 1
+                else:
+                    NBA_teams[opponent].sim_win += 1
+                    team.sim_FAT_L += 1
 
     for y in NBA_teams_checklist:
-        Ranking[NBA_teams[y].team_name] = NBA_teams[y].get_sim_win()
+        Ranking[NBA_teams[y].team_name] = round(NBA_teams[y].get_sim_win()/100,1)
 
     #rank by value
     ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
     for key, value in ranking_descending.items():
-        print (key, value, "-", 82-value)
+        print (key, value, "-", round(82-value,1))
 
 def trade_player(NBA_teams, NBA_teams_checklist):
     pprint(NBA_teams_checklist)
