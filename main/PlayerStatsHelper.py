@@ -28,6 +28,8 @@ class PlayerManager:
         free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
         treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
         off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
+        player_minutes = float(raw_stats['MinSecondsPerGame']['#text'])/60.0
+        turnover = float(raw_stats['TovPerGame']['#text'])
 
         player.set_points_per_game(points_per_game)
         player.set_assists_per_game(assists_per_game)
@@ -37,6 +39,9 @@ class PlayerManager:
         player.set_free_throws_made(free_throws_made)
         player.set_treys_made(treys_made)
         player.set_off_reb_per_game(off_reb_per_game)
+        player.set_minutes(player_minutes)
+        player.set_turnover(turnover)
+
 
     @classmethod
     def stat_calculator(cls, player):
@@ -77,3 +82,32 @@ class PlayerManager:
                            (0.6 * player.get_assists_per_game()))
 
         player.set_points_produced(points_produced)
+
+    @classmethod
+    def usage(cls,player,raw_stats,NBA_teams,team_name_abbr):
+        """Usage rate, a.k.a., usage percentage is an estimate of the percentage of team plays used by a player while he was on the floor."""
+
+        #Usage Rate Formula=100*((FGA+0.44*FTA+TO)*(TMP/5))/(MP*(TFGA+0.44*TFTA+TTO))
+        team_minutes = 48*5
+        player_minutes = player.get_player_minutes()
+        field_goal_attempts = player.get_field_goal_attempts()
+        free_throw_attempts = player.get_free_throw_attempts()
+        turnover = player.get_player_turnover()
+        team_field_goal_attempts = NBA_teams[team_name_abbr].get_field_goal_attempts()
+        team_free_throw_attempts = NBA_teams[team_name_abbr].get_free_throw_attempts()
+        team_turnover = NBA_teams[team_name_abbr].get_turnover()
+
+
+        #Calculation
+        if player_minutes == 0:
+            usage_rate = 0
+        else:
+            usage_rate = 100 * ((field_goal_attempts + 0.44 * free_throw_attempts + turnover) * (team_minutes / (5))) / (player_minutes * (team_field_goal_attempts + 0.44 * team_free_throw_attempts + team_turnover))
+            usage_rate = round(usage_rate,1)
+            print(player.FullName,usage_rate)
+            player.set_player_usage(usage_rate)
+
+
+
+      
+

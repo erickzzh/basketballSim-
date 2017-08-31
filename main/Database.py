@@ -80,7 +80,11 @@ def create_table_player():
                                                     treys_made REAL,
                                                     off_reb_per_game REAL,
                                                     points_produced REAL,
+                                                    turnover REAL,
+                                                    usage REAL,
+                                                    minutes REAL,
                                                     teamID REAL, 
+                                                    teamName TEXT,
                                                     startyear REAL,
                                                     FOREIGN KEY (teamID) REFERENCES team(teamID) ON DELETE SET NULL,
                                                     FOREIGN KEY (startyear) REFERENCES season_year(startyear) ON DELETE SET NULL)''')
@@ -236,6 +240,12 @@ def player_entry(active_players):
         free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
         treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
         off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
+        turnover = float(raw_stats['TovPerGame']['#text'])
+        minutes = float(raw_stats['MinSecondsPerGame']['#text'])/60.0
+        minutes = round(minutes,1)
+        teamName = str(base['team']['Abbreviation'])
+        usage = 0
+
 
         if free_throw_attempts > 0:
             effective_field_goal_percentage = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100.0
@@ -262,9 +272,13 @@ def player_entry(active_players):
                                         treys_made,
                                         off_reb_per_game,
                                         points_produced,
+                                        turnover,
+                                        usage,
+                                        minutes,
                                         teamID, 
+                                        teamName,
                                         startyear
-                                                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
                                         (playerid,
                                         fitsname,
                                         lastname,
@@ -281,7 +295,11 @@ def player_entry(active_players):
                                         treys_made,
                                         off_reb_per_game,
                                         points_produced,
-                                        teamID,
+                                        turnover,
+                                        usage,
+                                        minutes,
+                                        teamID, 
+                                        teamName,
                                         startyear))
 
         year_team_player.commit()
