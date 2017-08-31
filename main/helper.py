@@ -97,6 +97,8 @@ def trade_player(NBA_teams, NBA_teams_checklist):
 
 def off_and_deff_efficiency_rating(overall_team_standings, offensive_efficiency, defensive_efficiency, NBA_teams, NBA_teams_checklist):
     '''offensive efficiency and defensive efficiency of each team'''
+    game_possession = {}
+    points_allowed = {}
     for b in range(0,len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         base = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]
         base_team = base['team']
@@ -109,9 +111,9 @@ def off_and_deff_efficiency_rating(overall_team_standings, offensive_efficiency,
         freethrow_attempts = float(base_stats['FtAttPerGame']['#text'])
         offensive_rebounds = float(base_stats['OffRebPerGame']['#text'])
         points_scored = float(base_stats['PtsPerGame']['#text'])
-        points_allowed = float(base_stats['PtsAgainstPerGame']['#text'])
-
-        game_possession = 0.96 * (field_goal_attempts + turnovers + 0.44 * freethrow_attempts - offensive_rebounds)
+        points_allowed[team_name_abbr] = float(base_stats['PtsAgainstPerGame']['#text'])
+        
+        game_possession[team_name_abbr] = 0.96 * (field_goal_attempts + turnovers + 0.44 * freethrow_attempts - offensive_rebounds)
         offensive_efficiency[team_name_abbr]=100 * points_scored / game_possession
         defensive_efficiency[team_name_abbr]=100 * points_allowed / game_possession
         print(team_name_abbr, offensive_efficiency[team_name_abbr], defensive_efficiency[team_name_abbr])
@@ -122,6 +124,8 @@ def off_and_deff_efficiency_rating(overall_team_standings, offensive_efficiency,
     for key, value in NBA_teams_checklist.items():
         NBA_teams[key].offensive_efficiency = offensive_efficiency[key]
         NBA_teams[key].defensive_efficiency = defensive_efficiency[key]
+        NBA_teams[key].set_possessions(game_possession[key])
+        NBA_teams[key].set_points_allowed(points_allowed[key])
 
         ax.scatter(NBA_teams[key].offensive_efficiency, NBA_teams[key].defensive_efficiency)
 

@@ -103,6 +103,7 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     PlayerManager.stats_filler(raw_stats, player)
     PlayerManager.stat_calculator(player)
     player.set_team_id(team_id)
+    player.set_team_abbr(team_name_abbr)
     #populate the roster
     NBA_teams[team_name_abbr].add_players_roster(player.FullName)
     #populate the player class

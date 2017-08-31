@@ -1,5 +1,6 @@
 """Player Manager module"""
 from Player_class import Player
+from Team_class import Team
 
 class PlayerManager:
     """Contains methods that create and modify player objects"""
@@ -28,6 +29,7 @@ class PlayerManager:
         free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
         treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
         off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
+        tov_per_game = float(raw_stats['TovPerGame']['#text'])
 
         player.set_points_per_game(points_per_game)
         player.set_assists_per_game(assists_per_game)
@@ -37,6 +39,7 @@ class PlayerManager:
         player.set_free_throws_made(free_throws_made)
         player.set_treys_made(treys_made)
         player.set_off_reb_per_game(off_reb_per_game)
+        player.set_tov_per_game(tov_per_game)
 
     @classmethod
     def stat_calculator(cls, player):
@@ -77,3 +80,46 @@ class PlayerManager:
                            (0.6 * player.get_assists_per_game()))
 
         player.set_points_produced(points_produced)
+
+    @classmethod
+    def win_shares(cls, player, NBA_teams, NBA_teams_checklist):
+        """uses per-game averages to determine a player's 'win share'"""
+        cls.off_win_shares(player, NBA_teams, NBA_teams_checklist)
+        cls.def_win_shares(player, NBA_teams, NBA_teams_checklist)
+
+
+    @classmethod
+    def off_win_shares(cls, player, NBA_teams, NBA_teams_checklist):
+        """handles offensive win share calculations"""
+        team_abbr = player.get_team_abbr()
+        fg_attempts = player.get_field_goal_attempts()
+        turnovers = player.get_tov_per_game()
+        free_throw_attempts = player.get_free_throw_attempts()
+        offensive_rebounds = player.get_off_reb_per_game()
+        pts_produced = player.get_points_produced()
+
+        possessions = 0.96 * (fg_attempts + turnovers + 0.44 * free_throw_attempts - offensive_rebounds)
+
+        league_avg_poss = 0.96 * (7004 + 1144 + 0.44 * 1895 - 831)
+        league_pts_per_poss = 8658 / league_avg_poss
+
+        team_pace = NBA_teams[team_abbr].get_possessions()
+        league_pace = 0
+
+        for key, value in NBA_teams_checklist:
+            league_pace += NBA_teams[key].get_possessions()
+
+        marginal_offense = pts_produced - (0.92 * league_pts_per_poss * possessions)
+
+        marginal_pts_per_win = 0.32 * 105.6 * (team_pace / league_pace)
+
+        off_win_share = marginal_offense / marginal_pts_per_win
+
+        player.set_offensive_win_share(off_win_share)
+
+    @classmethod
+    def def_win_shares(cls, player, NBA_teams, NBA_teams_checklist):
+        """handles defensive win share calculations"""
+        team_abbr = player.get_team_abbr()
+        team_rating = NBA_teams[team_abbr].defensive_efficiency
+        individual_def_rating = team_rating + 0.2 * (100 * )

@@ -21,7 +21,8 @@ class Team:
 		self.game_schedule = []
 		self.sim_win = 0
 		self.sim_FAT_L = 0
-
+		self.possessions = 0
+		self.points_allowed = 0
 
 #printer
 	def print_roster(self):
@@ -82,3 +83,15 @@ class Team:
 
 	def change_effeiciency(self):
 		self.offensive_efficiency = 99999
+
+	def get_possessions(self):
+		return self.possessions
+
+	def set_possessions(self, value):
+		self.possessions = value
+
+	def get_points_allowed(self):
+		return self.points_allowed
+
+	def set_points_allowed(self, value):
+		self.points_allowed = value
