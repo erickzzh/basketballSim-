@@ -23,6 +23,25 @@ class Team:
 		self.sim_FAT_L = 0
 		self.possessions = 0
 		self.points_allowed = 0
+		self.free_throw_attempts = 0
+		self.field_goal_attempts = 0
+		self.turnover = 0
+
+
+	def change_effeiciency(self):
+		self.offensive_efficiency = 99999
+	#first create a complete roster in the list roster[]
+	def add_players_roster(self, players):
+		self.roster.insert(len(self.roster), players)
+
+	def add_player(self, player):
+		self.roster_class[player.get_full_name()] = player
+		# print("%s, PPG: %.2f, Effective FG%%: %.2f" % (self.roster_class[player.get_full_name()].get_full_name(),
+		# 						self.roster_class[player.get_full_name()].get_points(),
+		# 						self.roster_class[player.get_full_name()].get_effective_field_goal_percentage()))
+
+	def trade_players_roster(self, leaving_player, coming_player):
+		self.roster = [player.replace(leaving_player, coming_player) for player in self.roster]
 
 #printer
 	def print_roster(self):
@@ -53,20 +72,9 @@ class Team:
 	def print_team_winning_percentage(self):
 		print (self.winning_percentage)
 
-#first create a complete roster in the list roster[]
-	def add_players_roster(self, players):
-		self.roster.insert(len(self.roster), players)
-
-	def add_player(self, player):
-		self.roster_class[player.get_full_name()] = player
-		# print("%s, PPG: %.2f, Effective FG%%: %.2f" % (self.roster_class[player.get_full_name()].get_full_name(),
-		# 						self.roster_class[player.get_full_name()].get_points(),
-		# 						self.roster_class[player.get_full_name()].get_effective_field_goal_percentage()))
-
-	def trade_players_roster(self, leaving_player, coming_player):
-		self.roster = [player.replace(leaving_player, coming_player) for player in self.roster]
 
 
+#getter 
 	def get_team_theoretical_points(self):
 		'''calculates the team theoretical points if everyone plays'''
 		team_total_points = 0.0
@@ -95,3 +103,23 @@ class Team:
 
 	def set_points_allowed(self, value):
 		self.points_allowed = value
+	def get_free_throw_attempts(self):
+		return self.free_throw_attempts
+
+	def get_field_goal_attempts(self):
+		return self.field_goal_attempts
+
+	def get_turnover(self):
+		return self.turnover
+
+#setter
+	def set_field_goal_attempts(self,value):
+		self.field_goal_attempts = value
+
+	def set_free_throw_attempts(self,value):
+		self.free_throw_attempts = value
+
+	def set_turnover(self,value):
+		self.turnover = value
+
+

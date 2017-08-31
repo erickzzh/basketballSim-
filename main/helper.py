@@ -35,29 +35,29 @@ def ranking(NBA_teams, NBA_teams_checklist,Ranking):
     for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
         team = NBA_teams[team_name_abbr]
+        for x in range(0,50):
+            for a in range(0, len(team.game_schedule)):
+                opponent = team.game_schedule[a]
+                # #remove team from the opponent's game schedule
+                # while team_name_abbr in NBA_teams[opponent].game_schedule: NBA_teams[opponent].game_schedule.remove(team_name_abbr)
+                expected_winning_percentage = team.expected_winning_percentage[opponent]
+                temp_array = [team_name_abbr, opponent]
+                winning_team = np.random.choice(temp_array, 1, p=[expected_winning_percentage, 1-expected_winning_percentage])
 
-        for a in range(0, len(team.game_schedule)):
-            opponent = team.game_schedule[a]
-            #remove team from the opponent's game schedule
-            while team_name_abbr in NBA_teams[opponent].game_schedule: NBA_teams[opponent].game_schedule.remove(team_name_abbr)
-            expected_winning_percentage = team.expected_winning_percentage[opponent]
-            temp_array = [team_name_abbr, opponent]
-            winning_team = np.random.choice(temp_array, 1, p=[expected_winning_percentage, 1-expected_winning_percentage])
-
-            if winning_team[0] == team_name_abbr:
-                team.sim_win += 1
-                NBA_teams[opponent].sim_FAT_L += 1
-            else:
-                NBA_teams[opponent].sim_win += 1
-                team.sim_FAT_L += 1
+                if winning_team[0] == team_name_abbr:
+                    team.sim_win += 1
+                    NBA_teams[opponent].sim_FAT_L += 1
+                else:
+                    NBA_teams[opponent].sim_win += 1
+                    team.sim_FAT_L += 1
 
     for y in NBA_teams_checklist:
-        Ranking[NBA_teams[y].team_name] = NBA_teams[y].get_sim_win()
+        Ranking[NBA_teams[y].team_name] = round(NBA_teams[y].get_sim_win()/100,1)
 
     #rank by value
     ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
     for key, value in ranking_descending.items():
-        print (key, value, "-", 82-value)
+        print (key, value, "-", round(82-value,1))
 
 def trade_player(NBA_teams, NBA_teams_checklist):
     pprint(NBA_teams_checklist)
@@ -159,7 +159,13 @@ def four_factors(NBA_teams, NBA_teams_checklist, overall_team_standings):
         free_throw_attempts = float(base_stats['FtAttPerGame']['#text'])
         free_throws_made = float(base_stats['FtMadePerGame']['#text'])
         offensive_rebounds = float(base_stats['OffRebPerGame']['#text'])
-        
+        turnover = float(base_stats['TovPerGame']['#text'])
+
+        #set field_goal_attempts,free_throw_attempts,turnover into team stats
+        NBA_teams[team_name_abbr].set_field_goal_attempts(field_goal_attempts)
+        NBA_teams[team_name_abbr].set_free_throw_attempts(free_throw_attempts)
+        NBA_teams[team_name_abbr].set_turnover(turnover)
+
         #Calculating Effective Field Goal Percentage = (Field Goals Made) + 0.5*3P Field Goals Made))/(Field Goal Attempts)
         effective_field_goal_percentage[team_name_abbr] = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100
 
@@ -184,7 +190,9 @@ def four_factors(NBA_teams, NBA_teams_checklist, overall_team_standings):
         NBA_teams[key].turnover_rate = turnover_rate[key]
         NBA_teams[key].free_throw_rate = free_throw_rate[key]
 
+
 def winning_percentage(NBA_teams, NBA_teams_checklist, overall_team_standings):
+    '''this function is to support the player usage function'''
     #assign each team with a winning percentage
     for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
@@ -203,4 +211,22 @@ def winning_percentage(NBA_teams, NBA_teams_checklist, overall_team_standings):
             else:
                 a_against_b = (team_a_winning_pc-team_a_winning_pc*team_b_winning_pc)/(team_a_winning_pc+team_b_winning_pc-2*team_a_winning_pc*team_b_winning_pc)
                 NBA_teams[a].expected_winning_percentage[c] = abs(a_against_b)
+
+def team_basic_stats_filler(NBA_teams, overall_team_standings):
+
+    for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        base_team = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']
+        base_stats = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['stats']
+        team_name_abbr = base_team['Abbreviation']
+
+        #reading in data from JSON
+        field_goal_attempts = float(base_stats['FgAttPerGame']['#text'])
+        turnovers = float(base_stats['TovPerGame']['#text'])
+        free_throw_attempts = float(base_stats['FtAttPerGame']['#text'])
+
+
+        #set field_goal_attempts,free_throw_attempts,turnover into team stats
+        NBA_teams[team_name_abbr].set_field_goal_attempts(field_goal_attempts)
+        NBA_teams[team_name_abbr].set_free_throw_attempts(free_throw_attempts)
+        NBA_teams[team_name_abbr].set_turnover(turnovers)
 
