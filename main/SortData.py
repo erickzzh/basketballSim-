@@ -127,13 +127,14 @@ winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
 # print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
-# #database test
-# create_table_year()
-# create_table_teams()
-# create_table_player()
-# team_entry()
-# player_entry(active_players)
-get_each_team_schedule(NBA_teams,full_game_schedule)
+#database test
+create_table_year()
+create_table_teams()
+create_table_player()
+get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
+team_entry(NBA_teams)
+player_entry(active_players)
+
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)

@@ -54,6 +54,12 @@ def create_table_teams():
                                                     treys_made REAL,
                                                     free_throws_made REAL, 
                                                     startyear REAL,
+
+                                                    field_goal_attempts_pct REAL,
+                                                    defensive_rebonds REAL,
+                                                    opponent_fg_pct REAL,
+                                                    opponent_dor_pct REAL,
+                                                    opponent_possession REAL,
                                                     FOREIGN KEY (startyear) REFERENCES season_year(startyear)ON DELETE SET NULL)''')
 
 def create_table_player():
@@ -93,7 +99,7 @@ def data_entry_test():
     c.close()
     year_team_player.close()
 
-def team_entry():
+def team_entry(NBA_teams):
     '''fill in all columns of each team in the teams table'''
     for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         base = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]
@@ -115,11 +121,99 @@ def team_entry():
         defensive_efficiency = 100 * points_allowed/game_possession
         treys_made = float(stats['Fg3PtMadePerGame']['#text'])
         free_throws_made = float(stats['FtMadePerGame']['#text'])
+        field_goal_attempts_pct = float(stats['FgPct']['#text'])
+        defensive_rebonds = float(stats['DefRebPerGame']['#text'])
+        opponent_fg_pct = 0
+        opponent_dor_pct = 0
+        opponent_possession = 0
 
         startyear = 2016
-        c.execute('INSERT INTO team(teamID,team_name_abbre,full_name,field_goal_attempts,turnovers,freethrow_attempts,offensive_rebonds,points_scored,points_allowed,game_possession,offensive_efficiency,defensive_efficiency,treys_made,free_throws_made,startyear) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
-        						    , (teamid, team_name_abbre, full_name, field_goal_attempts, turnovers, freethrow_attempts, offensive_rebonds, points_scored, points_allowed, game_possession, offensive_efficiency, defensive_efficiency, treys_made, free_throws_made, startyear))
+        c.execute('''INSERT INTO team(teamID,
+                                        team_name_abbre,
+                                        full_name,
+                                        field_goal_attempts,
+                                        turnovers,freethrow_attempts,
+                                        offensive_rebonds,
+                                        points_scored,points_allowed,
+                                        game_possession,
+                                        offensive_efficiency,
+                                        defensive_efficiency,
+                                        treys_made,
+                                        free_throws_made,
+                                        startyear,
+                                        field_goal_attempts_pct ,
+                                        defensive_rebonds ,
+                                        opponent_fg_pct ,
+                                        opponent_dor_pct,
+                                        opponent_possession) 
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
+        						    , (teamid, 
+                                        team_name_abbre,
+                                        full_name, 
+                                        field_goal_attempts, 
+                                        turnovers, 
+                                        freethrow_attempts, 
+                                        offensive_rebonds, 
+                                        points_scored, 
+                                        points_allowed, 
+                                        game_possession, 
+                                        offensive_efficiency, 
+                                        defensive_efficiency, 
+                                        treys_made, 
+                                        free_throws_made, 
+                                        startyear,
+
+                                        field_goal_attempts_pct ,
+                                        defensive_rebonds ,
+                                        opponent_fg_pct ,
+                                        opponent_dor_pct,
+                                        opponent_possession))
         year_team_player.commit()
+
+    #for loop to populate the opponent_fg_pct,opponent_dor_pct,opponent_possession values 
+    for a in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
+        base = overall_team_standings['overallteamstandings']['teamstandingsentry'][a]
+        stats = base['stats']
+        teamid = base['team']['ID']
+        team_name_abbre = base['team']['Abbreviation']
+        team_name = base['team']['Name']
+        city = base['team']['City']
+
+
+        opponent_fg_pct = 0
+        opponent_dor_pct = 0
+        opponent_possession = 0
+
+        for x in range (0,82):
+            opponent = NBA_teams[team_name_abbre].game_schedule[x]
+            c.execute('SELECT teamID FROM team WHERE team_name_abbre=? AND startyear=2016',(opponent,))
+            opponent_id = c.fetchone()[0]
+
+            #get opponent field goal %
+            c.execute('SELECT field_goal_attempts_pct FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            fg_pct = c.fetchone()[0]
+            print(fg_pct)
+            opponent_fg_pct += fg_pct
+            year_team_player.commit()
+
+            #get opponent DOR%
+            c.execute('SELECT offensive_rebonds FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            opponent_ofr = c.fetchone()[0]
+            c.execute('SELECT defensive_rebonds FROM team WHERE teamID=? AND startyear=2016',(teamid,))
+            base_team_dfr = c.fetchone()[0]
+            opponent_dor_pct += (opponent_ofr / (opponent_ofr + base_team_dfr))
+
+            #get opponent possession
+            c.execute('SELECT game_possession FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            opponent_poss = c.fetchone()[0]   
+            opponent_possession += opponent_poss 
+        #update table    
+        c.execute('''UPDATE team SET opponent_fg_pct = ?/82,
+                                     opponent_dor_pct = ?/82,
+                                     opponent_possession = ?/82 WHERE teamID = ?''',(opponent_fg_pct,opponent_dor_pct,opponent_possession,teamid,))       
+
+
+
 
 def player_entry(active_players):
     '''fill in all columns of each player in the players table'''
@@ -194,8 +288,8 @@ def player_entry(active_players):
 
 def grab_data():
     '''obtain data for testing purposes'''
-    c.execute('SELECT Firstname FROM player WHERE teamID=01 AND startyear=2016')
-    data = c.fetchall()
+    c.execute('SELECT turnovers FROM team WHERE teamID=109 AND startyear=2016')
+    data = c.fetchone()[0]
     print (data)
 
 def trade_player_db(firstPlayer, secondPlayer):
