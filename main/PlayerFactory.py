@@ -2,7 +2,7 @@
     instances of the Player class'''
 import sqlite3
 from Player_class import Player
-
+from Team_class import Team
 class PlayerFactory:
     """Contains methods that create and modify player objects"""
 
@@ -13,7 +13,7 @@ class PlayerFactory:
     ################################
 
     @classmethod
-    def players_from_db(cls):
+    def players_from_db(cls, NBA_teams):
         '''grab and return all player data from the database, as a collection of Players'''
         #connect to our sqlite database
         year_team_player = sqlite3.connect("NBA_Database.db")
@@ -38,18 +38,19 @@ class PlayerFactory:
                             turnover,
                             usage,
                             minutes,
-                            teamID from player''')
+                            teamID,
+                            teamName from player''')
 
-        return (cls.extract_data(db_players))
+        return (cls.extract_data(db_players, NBA_teams))
 
     @classmethod
-    def extract_data(cls, db_players):
+    def extract_data(cls, db_players, NBA_teams):
         players = []
         #iterate through all of the obtained players
         for (playerID, Firstname, Lastname, position, points_per_game, assists_per_game,
              effective_field_goal_percentage, true_shooting_percentage, field_goal_attempts,
              field_goals_made, free_throw_attempts, free_throws_made, treys_made, off_reb_per_game,
-             points_produced, turnover, usage, minutes, teamID) in db_players:
+             points_produced, turnover, usage, minutes, teamID, teamName) in db_players:
             
             #create a player and populate his stats + info
             a_player = Player.alt_init(Firstname, Lastname, position)
@@ -72,6 +73,8 @@ class PlayerFactory:
             a_player.set_team_id(teamID)
 
             players.append(a_player)
+            NBA_teams[teamName].add_player(a_player)
+            NBA_teams[teamName].add_players_roster(a_player.get_full_name())
 
         return players
 
