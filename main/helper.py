@@ -266,4 +266,3 @@ def teams_from_db(NBA_teams, NBA_teams_checklist):
     print("DONE DB WORK \n")
     year_team_player.close()
 
-def players_from_db():
