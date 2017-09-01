@@ -105,6 +105,7 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     team_basic_stats_filler(NBA_teams, overall_team_standings)
     PlayerManager.usage(player,raw_stats,NBA_teams,team_name_abbr)
     player.set_team_id(team_id)
+    player.set_team_abbr(team_name_abbr)
     #populate the roster
     NBA_teams[team_name_abbr].add_players_roster(player.FullName)
     #populate the player class
@@ -136,7 +137,8 @@ create_table_player()
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
 team_entry(NBA_teams)
 player_entry(active_players)
-
+#uncomment the next line to test reading teams from DB
+#teams_from_db(NBA_teams,NBA_teams_checklist)
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)

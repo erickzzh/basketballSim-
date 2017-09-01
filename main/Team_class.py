@@ -21,6 +21,8 @@ class Team:
 		self.game_schedule = []
 		self.sim_win = 0
 		self.sim_FAT_L = 0
+		self.possessions = 0
+		self.points_allowed = 0
 		self.free_throw_attempts = 0
 		self.field_goal_attempts = 0
 		self.turnover = 0
@@ -87,6 +89,15 @@ class Team:
 	def get_sim_FAT_L(self):
 		return self.sim_FAT_L
 
+	def change_effeiciency(self):
+		self.offensive_efficiency = 99999
+
+	def get_possessions(self):
+		return self.possessions
+
+	def get_points_allowed(self):
+		return self.points_allowed
+
 	def get_free_throw_attempts(self):
 		return self.free_throw_attempts
 
@@ -106,4 +117,8 @@ class Team:
 	def set_turnover(self,value):
 		self.turnover = value
 
+	def set_possessions(self, value):
+		self.possessions = value
 
+	def set_points_allowed(self, value):
+		self.points_allowed = value

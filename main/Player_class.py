@@ -3,6 +3,7 @@ class Player:
 	def __init__(self, FirstName, LastName, Position, points_per_game):
 		self.player_id = 0
 		self.team_id = 0
+		self.team_abbr = ""
 		self.FirstName = FirstName
 		self.LastName = LastName
 		self.FullName = FirstName + " " + LastName
@@ -18,6 +19,9 @@ class Player:
 		self.treys_made = 0
 		self.off_reb_per_game = 0
 		self.points_produced = 0
+		self.tov_per_game = 0
+		self.offensive_win_share = 0
+		self.defensive_win_share = 0
 		self.player_usage = 0
 		self.turnover = 0
 		self.minutes = 0
@@ -37,6 +41,9 @@ class Player:
 
 	def get_team_id(self):
 		return self.team_id
+
+	def get_team_abbr(self):
+		return self.team_abbr
 
 	def get_points(self):
 		return self.points_per_game
@@ -74,6 +81,14 @@ class Player:
 	def get_points_produced(self):
 		return self.points_produced
 
+	def get_tov_per_game(self):
+		return self.tov_per_game
+
+	def get_offensive_win_share(self):
+		return self.offensive_win_share
+
+	def get_defensive_win_share(self):
+		return self.defensive_win_share
 	def get_player_usage(self):
 		return self.player_usage
 
@@ -89,6 +104,9 @@ class Player:
 
 	def set_team_id(self, value):
 		self.team_id = value
+
+	def set_team_abbr(self, value):
+		self.team_abbr = value
 
 	def set_true_shooting_percentage(self, value):
 		self.true_shooting_percentage = value
@@ -122,6 +140,15 @@ class Player:
 
 	def set_points_produced(self, value):
 		self.points_produced = value
+
+	def set_tov_per_game(self, value):
+		self.tov_per_game = value
+
+	def set_offensive_win_share(self, value):
+		self.offensive_win_share = value
+
+	def set_defensive_win_share(self, value):
+		self.defensive_win_share = value
 
 	def set_player_usage(self,value):
 		self.player_usage = value
