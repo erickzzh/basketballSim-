@@ -139,8 +139,8 @@ class PlayerManager:
         #Stops = STL + BLK + FMwt * (1 - 1.07 * DOR%) + DREB * (1 - FMwt)
         
 
-        individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - ))
-
+        #individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - ))
+    @classmethod
     def usage(cls,player,raw_stats,NBA_teams,team_name_abbr):
         """Usage rate, a.k.a., usage percentage is an estimate of the percentage of team plays used by a player while he was on the floor."""
 

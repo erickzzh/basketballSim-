@@ -137,7 +137,8 @@ create_table_player()
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
 team_entry(NBA_teams)
 player_entry(active_players)
-
+#uncomment the next line to test reading teams from DB
+#teams_from_db(NBA_teams,NBA_teams_checklist)
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)
