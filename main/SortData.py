@@ -4,6 +4,7 @@ import os
 from helper import *
 from PlayerStatsHelper import *
 from Database import *
+from PlayerFactory import *
 
 NBA_teams_checklist={}
 NBA_teams={}
@@ -135,11 +136,16 @@ create_table_year()
 create_table_teams()
 create_table_player()
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
-team_entry(NBA_teams)
-player_entry(active_players)
+#team_entry(NBA_teams)
+#player_entry(active_players)
 #uncomment the next line to test reading teams from DB
 #teams_from_db(NBA_teams,NBA_teams_checklist)
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)
 #ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
+
+#uncomment the lines below to test PlayerFactory
+# all_players = PlayerFactory.players_from_db()
+# for player in all_players:
+#     print (player.FullName + ": " + str(player.team_id))
