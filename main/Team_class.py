@@ -95,14 +95,9 @@ class Team:
 	def get_possessions(self):
 		return self.possessions
 
-	def set_possessions(self, value):
-		self.possessions = value
-
 	def get_points_allowed(self):
 		return self.points_allowed
 
-	def set_points_allowed(self, value):
-		self.points_allowed = value
 	def get_free_throw_attempts(self):
 		return self.free_throw_attempts
 
@@ -122,4 +117,8 @@ class Team:
 	def set_turnover(self,value):
 		self.turnover = value
 
+	def set_possessions(self, value):
+		self.possessions = value
 
+	def set_points_allowed(self, value):
+		self.points_allowed = value

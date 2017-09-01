@@ -126,8 +126,21 @@ class PlayerManager:
     def def_win_shares(cls, player, NBA_teams, NBA_teams_checklist):
         """handles defensive win share calculations"""
         team_abbr = player.get_team_abbr()
-        team_rating = NBA_teams[team_abbr].defensive_efficiency
-        individual_def_rating = team_rating + 0.2 * (100 * )
+        team = NBA_teams[team_abbr]
+
+        schedule = team.game_schedule
+        total_opponent_poss = 0
+        pts_allowed = team.get_points_allowed()
+        for a in range(0, len(team.game_schedule)):
+            total_opponent_poss += NBA_teams[a].get_possessions()
+
+        team_rating = team.defensive_efficiency
+        def_pts_per_scoring_poss = pts_allowed / total_opponent_poss
+        #Stops = STL + BLK + FMwt * (1 - 1.07 * DOR%) + DREB * (1 - FMwt)
+        
+
+        individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - ))
+
     def usage(cls,player,raw_stats,NBA_teams,team_name_abbr):
         """Usage rate, a.k.a., usage percentage is an estimate of the percentage of team plays used by a player while he was on the floor."""
 
