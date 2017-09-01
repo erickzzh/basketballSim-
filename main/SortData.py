@@ -134,9 +134,10 @@ winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
 create_table_year()
 create_table_teams()
 create_table_player()
-team_entry()
+get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
+team_entry(NBA_teams)
 player_entry(active_players)
-get_each_team_schedule(NBA_teams,full_game_schedule)
+
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)
