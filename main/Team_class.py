@@ -26,6 +26,23 @@ class Team:
 		self.free_throw_attempts = 0
 		self.field_goal_attempts = 0
 		self.turnover = 0
+		self.offensive_rebounds = 0
+		self.points_scored = 0
+		self.treys_made = 0
+		self.free_throw_made = 0
+
+		self.field_goal_attempts_pct = 0
+		self.defensive_rebonds = 0
+		self.opponent_fg_pct = 0
+		self.opponent_dor_pct = 0
+		self.opponent_possession = 0
+
+	@classmethod
+	def alt_init(cls, team_name_abbre, team_name):
+		return cls(team_name_abbre, team_name)
+
+
+
 
 
 	def change_effeiciency(self):
@@ -108,6 +125,45 @@ class Team:
 		return self.turnover
 
 #setter
+	def set_teamID(self,value):
+		self.teamid = value
+	
+	def set_team_name_abbr(self,value):
+		self.team_name_abbr = value
+
+	def set_team_name(self,value):
+		self.team_name = value
+		
+	def set_offensive_efficiency(self,value):
+		self.offensive_efficiency = value
+
+	def set_defensive_efficiency(self,value):
+		self.defensive_efficiency = value
+
+	def set_possessions_per_game(self,value):
+		self.positions_per_game = value
+
+	def set_effective_field_goal_percentage(self,value):
+		self.effective_field_goal_percentage = value
+
+	def set_turnover_rate(self,value):
+		self.turnover_rate = value
+
+	def set_offensive_rebounding_percentage(self,value):
+		self.offensive_rebounding_percentage = value
+
+	def set_free_throw_rate(self,value):
+		self.free_throw_rate = value
+
+	def set_winning_percentage(self,value):
+		self.winning_percentage = value
+
+	def set_sim_win(self,value):
+		self.sim_win = value
+
+	def set_sim_FAT_L(self,value):
+		self.sim_FAT_L = value
+
 	def set_field_goal_attempts(self,value):
 		self.field_goal_attempts = value
 
@@ -122,3 +178,33 @@ class Team:
 
 	def set_points_allowed(self, value):
 		self.points_allowed = value
+
+	def set_offensive_rebounds(self,value):
+		self.offensive_rebounds = value
+
+	def set_points_scored(self,value):
+		self.points_scored = value
+
+	def set_treys_made(self,value):
+		self.treys_made = value
+
+	def set_field_goal_attempts_pct(self,value):
+		self.field_goal_attempts_pct = value
+
+	def set_defensive_rebonds(self,value):
+		self.defensive_rebonds = value
+
+	def set_opponent_fg_pct(self,value):
+		self.opponent_fg_pct = value
+
+	def set_opponent_dor_pct(self,value):
+		self.opponent_dor_pct = value
+
+	def set_opponent_possession(self,value):
+		self.opponent_possession = value
+
+	def set_team_name(self,value):
+		self.team_name = value
+
+	def set_free_throw_made(self,value):
+		self.free_throw_made = value

@@ -5,6 +5,7 @@ from helper import *
 from PlayerStatsHelper import *
 from Database import *
 from PlayerFactory import *
+from TeamFactory import *
 
 NBA_teams_checklist={}
 NBA_teams={}
@@ -103,7 +104,7 @@ for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playersta
     player = PlayerManager.make_player(raw_player)
     PlayerManager.stats_filler(raw_stats, player)
     PlayerManager.stat_calculator(player)
-    team_basic_stats_filler(NBA_teams, overall_team_standings)
+    TeamFactory.team_basic_stats_filler(NBA_teams, overall_team_standings)
     PlayerManager.usage(player,raw_stats,NBA_teams,team_name_abbr)
     player.set_team_id(team_id)
     player.set_team_abbr(team_name_abbr)
@@ -121,13 +122,13 @@ assign_teamid(NBA_teams,overall_team_standings)
 ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 #trade_player(NBA_teams,NBA_teams_checklist)
 ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
-off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,defensive_efficiency,NBA_teams,NBA_teams_checklist)
+TeamFactory.off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,defensive_efficiency,NBA_teams,NBA_teams_checklist)
 #NBA_teams['BOS'].change_effeiciency()
-four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
+TeamFactory.four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
 #access players
 #NBA_teams['LAL'].roster_class["IvicaZubac"].set_points_per_game(999999999)
 #NBA_teams['LAL'].roster_class["IvicaZubac"].print_points_per_game()
-winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
+TeamFactory.winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standings)
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
 # print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
@@ -136,8 +137,8 @@ create_table_year()
 create_table_teams()
 create_table_player()
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
-#team_entry(NBA_teams)
-#player_entry(active_players)
+# team_entry(NBA_teams)
+# player_entry(active_players)
 #uncomment the next line to test reading teams from DB
 #teams_from_db(NBA_teams,NBA_teams_checklist)
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
@@ -145,6 +146,10 @@ ranking(NBA_teams,NBA_teams_checklist,Ranking)
 #trade_player(NBA_teams,NBA_teams_checklist)
 #ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 
+################factory reset###############
+# all_team = TeamFactory.teams_from_db()
+# for team in all_team:
+#     print (team.team_name_abbr + ": " + str(team.teamid))
 #uncomment the lines below to test PlayerFactory
 # all_players = PlayerFactory.players_from_db()
 # for player in all_players:

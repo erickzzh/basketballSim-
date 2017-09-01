@@ -41,6 +41,7 @@ def create_table_teams():
     '''makes the table that contains all team entries'''
     c.execute('''CREATE TABLE IF NOT EXISTS team(teamID REAL PRIMARY KEY,
                                                     team_name_abbre TEXT,
+                                                    team_name TEXT,
                                                     full_name TEXT,
                                                     field_goal_attempts REAL,
                                                     turnovers REAL,
@@ -134,6 +135,7 @@ def team_entry(NBA_teams):
         startyear = 2016
         c.execute('''INSERT INTO team(teamID,
                                         team_name_abbre,
+                                        team_name,
                                         full_name,
                                         field_goal_attempts,
                                         turnovers,freethrow_attempts,
@@ -150,9 +152,10 @@ def team_entry(NBA_teams):
                                         opponent_fg_pct ,
                                         opponent_dor_pct,
                                         opponent_possession) 
-                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
         						    , (teamid, 
                                         team_name_abbre,
+                                        team_name,
                                         full_name, 
                                         field_goal_attempts, 
                                         turnovers, 
@@ -214,7 +217,8 @@ def team_entry(NBA_teams):
         #update table    
         c.execute('''UPDATE team SET opponent_fg_pct = ?/82,
                                      opponent_dor_pct = ?/82,
-                                     opponent_possession = ?/82 WHERE teamID = ?''',(opponent_fg_pct,opponent_dor_pct,opponent_possession,teamid,))       
+                                     opponent_possession = ?/82 WHERE teamID = ?''',(opponent_fg_pct,opponent_dor_pct,opponent_possession,teamid,))
+        year_team_player.commit()       
 
 
 
