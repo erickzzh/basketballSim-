@@ -18,6 +18,7 @@ class Player:
 		self.free_throws_made = 0
 		self.treys_made = 0
 		self.off_reb_per_game = 0
+		self.def_reb_per_game = 0
 		self.points_produced = 0
 		self.tov_per_game = 0
 		self.offensive_win_share = 0
@@ -79,6 +80,9 @@ class Player:
 
 	def get_off_reb_per_game(self):
 		return self.off_reb_per_game
+
+	def get_def_reb_per_game(self):
+		return self.def_reb_per_game
 
 	def get_points_produced(self):
 		return self.points_produced
@@ -145,6 +149,9 @@ class Player:
 
 	def set_off_reb_per_game(self, value):
 		self.off_reb_per_game = value
+
+	def set_def_reb_per_game(self, value):
+		self.def_reb_per_game = value
 
 	def set_points_produced(self, value):
 		self.points_produced = value

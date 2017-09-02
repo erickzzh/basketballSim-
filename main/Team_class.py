@@ -127,6 +127,12 @@ class Team:
 	def get_opponent_possession(self):
 		return self.opponent_possession
 
+	def get_opponent_fg_pct(self):
+		return self.opponent_fg_pct
+
+	def get_opponent_dor_pct(self):
+		return self.opponent_dor_pct
+
 #setter
 	def set_teamID(self,value):
 		self.teamid = value

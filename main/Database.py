@@ -80,6 +80,7 @@ def create_table_player():
                                                     free_throws_made REAL,
                                                     treys_made REAL,
                                                     off_reb_per_game REAL,
+                                                    def_reb_per_game REAL,
                                                     points_produced REAL,
                                                     turnover REAL,
                                                     usage REAL,
@@ -249,6 +250,7 @@ def player_entry(active_players):
         free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
         treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
         off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
+        def_reb_per_game = float(raw_stats['DefRebPerGame']['#text'])
         turnover = float(raw_stats['TovPerGame']['#text'])
         minutes = float(raw_stats['MinSecondsPerGame']['#text'])/60.0
         minutes = round(minutes,1)
@@ -282,6 +284,7 @@ def player_entry(active_players):
                                         free_throws_made,
                                         treys_made,
                                         off_reb_per_game,
+                                        def_reb_per_game,
                                         points_produced,
                                         turnover,
                                         usage,
@@ -291,7 +294,7 @@ def player_entry(active_players):
                                         teamID, 
                                         teamName,
                                         startyear)
-                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
                                         (playerid,
                                         fitsname,
                                         lastname,
@@ -307,6 +310,7 @@ def player_entry(active_players):
                                         free_throws_made,
                                         treys_made,
                                         off_reb_per_game,
+                                        def_reb_per_game,
                                         points_produced,
                                         turnover,
                                         usage,

@@ -34,10 +34,13 @@ class PlayerFactory:
                             free_throws_made,
                             treys_made,
                             off_reb_per_game,
+                            def_reb_per_game,
                             points_produced,
                             turnover,
                             usage,
                             minutes,
+                            blocks,
+                            steals,
                             teamID,
                             teamName from player''')
 
@@ -50,7 +53,8 @@ class PlayerFactory:
         for (playerID, Firstname, Lastname, position, points_per_game, assists_per_game,
              effective_field_goal_percentage, true_shooting_percentage, field_goal_attempts,
              field_goals_made, free_throw_attempts, free_throws_made, treys_made, off_reb_per_game,
-             points_produced, turnover, usage, minutes, teamID, teamName) in db_players:
+             def_reb_per_game, points_produced, turnover, usage, minutes, blocks, steals,
+             teamID, teamName) in db_players:
             
             #create a player and populate his stats + info
             a_player = Player.alt_init(Firstname, Lastname, position)
@@ -71,6 +75,9 @@ class PlayerFactory:
             a_player.set_player_usage(usage)
             a_player.set_minutes(minutes)
             a_player.set_team_id(teamID)
+            a_player.set_def_reb_per_game(def_reb_per_game)
+            a_player.set_steals(steals)
+            a_player.set_blocks(blocks)
 
             players.append(a_player)
             NBA_teams[teamName].add_player(a_player)
@@ -205,17 +212,23 @@ class PlayerFactory:
         team_abbr = player.get_team_abbr()
         team = NBA_teams[team_abbr]
 
-        schedule = team.game_schedule
-
         pts_allowed = team.get_points_allowed()
         total_opponent_poss = team.get_opponent_possession()
 
         team_rating = team.defensive_efficiency
         def_pts_per_scoring_poss = pts_allowed / total_opponent_poss
-        #Stops = STL + BLK + FMwt * (1 - 1.07 * DOR%) + DREB * (1 - FMwt)
-        
 
-        #individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - ))
+        steals = player.get_steals()
+        blocks = player.get_blocks()
+        def_reb = player.get_def_reb_per_game()
+        dfg = team.get_opponent_fg_pct()
+        dor = team.get_opponent_dor_pct()
+
+        fmwt = (dfg * (1 - dor)) / (dfg * (1 - dor) + dor * (1 - dfg))
+        #Stops = STL + BLK + FMwt * (1 - 1.07 * DOR%) + DREB * (1 - FMwt)
+        stops = steals + blocks + fmwt * (1 - 1.07 * dor) + def_reb * (1 - fmwt)
+
+        individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - stops) - team_rating)
 
     @classmethod
     def usage(cls,player,raw_stats,NBA_teams,team_name_abbr):
