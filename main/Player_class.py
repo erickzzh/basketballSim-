@@ -18,13 +18,17 @@ class Player:
 		self.free_throws_made = 0
 		self.treys_made = 0
 		self.off_reb_per_game = 0
+		self.def_reb_per_game = 0
 		self.points_produced = 0
 		self.tov_per_game = 0
 		self.offensive_win_share = 0
 		self.defensive_win_share = 0
+		self.total_win_share = 0
 		self.player_usage = 0
 		self.turnover = 0
 		self.minutes = 0
+		self.steals = 0
+		self.blocks = 0
 
 	def print_name(self):
 		print (self.FullName)
@@ -78,6 +82,9 @@ class Player:
 	def get_off_reb_per_game(self):
 		return self.off_reb_per_game
 
+	def get_def_reb_per_game(self):
+		return self.def_reb_per_game
+
 	def get_points_produced(self):
 		return self.points_produced
 
@@ -89,6 +96,10 @@ class Player:
 
 	def get_defensive_win_share(self):
 		return self.defensive_win_share
+
+	def get_total_win_share(self):
+		return self.total_win_share
+
 	def get_player_usage(self):
 		return self.player_usage
 
@@ -97,6 +108,12 @@ class Player:
 
 	def get_player_minutes(self):
 		return self.minutes
+
+	def get_steals(self):
+		return self.steals
+
+	def get_blocks(self):
+		return self.blocks
 
 	#setters
 	def set_player_id(self, value):
@@ -138,6 +155,9 @@ class Player:
 	def set_off_reb_per_game(self, value):
 		self.off_reb_per_game = value
 
+	def set_def_reb_per_game(self, value):
+		self.def_reb_per_game = value
+
 	def set_points_produced(self, value):
 		self.points_produced = value
 
@@ -150,6 +170,9 @@ class Player:
 	def set_defensive_win_share(self, value):
 		self.defensive_win_share = value
 
+	def set_total_win_share(self, value):
+		self.total_win_share = value
+
 	def set_player_usage(self,value):
 		self.player_usage = value
 
@@ -158,6 +181,13 @@ class Player:
 
 	def set_minutes(self,value):
 		self.minutes = value
+
+	def set_steals(self, value):
+		self.steals = value
+	
+	def set_blocks(self, value):
+		self.blocks = value
+
 	@classmethod
 	def alt_init(cls, FirstName, LastName, Position):
 		return cls(FirstName, LastName, Position, 0)

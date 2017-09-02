@@ -92,6 +92,9 @@ class Team:
 
 
 #getter 
+	def get_team_name_abbr(self):
+		return self.team_name_abbr
+
 	def get_team_theoretical_points(self):
 		'''calculates the team theoretical points if everyone plays'''
 		team_total_points = 0.0
@@ -123,6 +126,18 @@ class Team:
 
 	def get_turnover(self):
 		return self.turnover
+
+	def get_points_scored(self):
+		return self.points_scored
+
+	def get_opponent_possession(self):
+		return self.opponent_possession
+
+	def get_opponent_fg_pct(self):
+		return self.opponent_fg_pct
+
+	def get_opponent_dor_pct(self):
+		return self.opponent_dor_pct
 
 #setter
 	def set_teamID(self,value):
