@@ -25,6 +25,8 @@ class Player:
 		self.player_usage = 0
 		self.turnover = 0
 		self.minutes = 0
+		self.steals = 0
+		self.blocks = 0
 
 	def print_name(self):
 		print (self.FullName)
@@ -98,6 +100,12 @@ class Player:
 	def get_player_minutes(self):
 		return self.minutes
 
+	def get_steals(self):
+		return self.steals
+
+	def get_blocks(self):
+		return self.blocks
+
 	#setters
 	def set_player_id(self, value):
 		self.player_id = value
@@ -158,6 +166,13 @@ class Player:
 
 	def set_minutes(self,value):
 		self.minutes = value
+
+	def set_steals(self, value):
+		self.steals = value
+	
+	def set_blocks(self, value):
+		self.blocks = value
+
 	@classmethod
 	def alt_init(cls, FirstName, LastName, Position):
 		return cls(FirstName, LastName, Position, 0)

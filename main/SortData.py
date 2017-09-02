@@ -141,6 +141,7 @@ print("\n")
 #database test
 create_table_year()
 create_table_teams()
+#temp_method()
 create_table_player()
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
 # team_entry(NBA_teams)

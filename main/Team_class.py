@@ -124,6 +124,9 @@ class Team:
 	def get_turnover(self):
 		return self.turnover
 
+	def get_opponent_possession(self):
+		return self.opponent_possession
+
 #setter
 	def set_teamID(self,value):
 		self.teamid = value

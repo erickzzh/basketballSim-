@@ -84,11 +84,16 @@ def create_table_player():
                                                     turnover REAL,
                                                     usage REAL,
                                                     minutes REAL,
+                                                    blocks REAL,
+                                                    steals REAL,
                                                     teamID REAL, 
                                                     teamName TEXT,
                                                     startyear REAL,
                                                     FOREIGN KEY (teamID) REFERENCES team(teamID) ON DELETE SET NULL,
                                                     FOREIGN KEY (startyear) REFERENCES season_year(startyear) ON DELETE SET NULL)''')
+# def temp_method():
+#     c.execute('''DROP TABLE player''')
+#     year_team_player.commit()
 
 def data_entry_test():
     '''test method for database functionality'''
@@ -247,6 +252,8 @@ def player_entry(active_players):
         turnover = float(raw_stats['TovPerGame']['#text'])
         minutes = float(raw_stats['MinSecondsPerGame']['#text'])/60.0
         minutes = round(minutes,1)
+        steals = float(raw_stats['StlPerGame']['#text'])
+        blocks = float(raw_stats['BlkPerGame']['#text'])
         teamName = str(base['team']['Abbreviation'])
         usage = 0
 
@@ -279,10 +286,12 @@ def player_entry(active_players):
                                         turnover,
                                         usage,
                                         minutes,
+                                        blocks,
+                                        steals,
                                         teamID, 
                                         teamName,
-                                        startyear
-                                                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                        startyear)
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
                                         (playerid,
                                         fitsname,
                                         lastname,
@@ -302,7 +311,9 @@ def player_entry(active_players):
                                         turnover,
                                         usage,
                                         minutes,
-                                        teamID, 
+                                        blocks,
+                                        steals,
+                                        teamID,
                                         teamName,
                                         startyear))
 
