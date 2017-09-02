@@ -23,6 +23,7 @@ class Player:
 		self.tov_per_game = 0
 		self.offensive_win_share = 0
 		self.defensive_win_share = 0
+		self.total_win_share = 0
 		self.player_usage = 0
 		self.turnover = 0
 		self.minutes = 0
@@ -95,6 +96,10 @@ class Player:
 
 	def get_defensive_win_share(self):
 		return self.defensive_win_share
+
+	def get_total_win_share(self):
+		return self.total_win_share
+
 	def get_player_usage(self):
 		return self.player_usage
 
@@ -164,6 +169,9 @@ class Player:
 
 	def set_defensive_win_share(self, value):
 		self.defensive_win_share = value
+
+	def set_total_win_share(self, value):
+		self.total_win_share = value
 
 	def set_player_usage(self,value):
 		self.player_usage = value

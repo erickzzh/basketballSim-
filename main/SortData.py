@@ -91,6 +91,13 @@ while more_data:
         clear_input()
 ##################################populates the roster list as well as creating the team class(including all attributes within the team class)######################
 #create classes for each team
+
+#UNCOMMENT THIS LOADING FROM DB METHOD TO TEST WIN SHARES
+# teams = TeamFactory.teams_from_db()
+# for team in teams:
+#     NBA_teams[team.get_team_name_abbr()] = team
+
+#old nba_teams filling method
 for key,value in NBA_teams_checklist.items():
     NBA_teams[key]=Team(key,value)
 
@@ -133,7 +140,7 @@ TeamFactory.winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standi
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
 # print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
-player_manager.load_players(NBA_teams)
+player_manager.load_players(NBA_teams, NBA_teams_checklist)
 #testing PPG after loading players
 print("\nPoints per game ranking after loading players from DB:")
 ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)

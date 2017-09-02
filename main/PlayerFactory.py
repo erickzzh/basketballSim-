@@ -75,6 +75,7 @@ class PlayerFactory:
             a_player.set_player_usage(usage)
             a_player.set_minutes(minutes)
             a_player.set_team_id(teamID)
+            a_player.set_team_abbr(teamName)
             a_player.set_def_reb_per_game(def_reb_per_game)
             a_player.set_steals(steals)
             a_player.set_blocks(blocks)
@@ -173,9 +174,14 @@ class PlayerFactory:
     @classmethod
     def win_shares(cls, player, NBA_teams, NBA_teams_checklist):
         """uses per-game averages to determine a player's 'win share'"""
-        cls.off_win_shares(player, NBA_teams, NBA_teams_checklist)
-        cls.def_win_shares(player, NBA_teams, NBA_teams_checklist)
+        off_win_share = cls.off_win_shares(player, NBA_teams, NBA_teams_checklist)
+        def_win_share = cls.def_win_shares(player, NBA_teams, NBA_teams_checklist)
+        total = off_win_share + def_win_share
+        if player.FullName == "LeBron James":
+            print(player.FullName + " off_win_share: " + str(off_win_share) +
+                  ", def_win_share: " + str(def_win_share) + ", total: " + str(total))
 
+        player.set_total_win_share(total)
 
     @classmethod
     def off_win_shares(cls, player, NBA_teams, NBA_teams_checklist):
@@ -195,7 +201,7 @@ class PlayerFactory:
         team_pace = NBA_teams[team_abbr].get_possessions()
         league_pace = 0
 
-        for key, value in NBA_teams_checklist:
+        for key, value in NBA_teams_checklist.items():
             league_pace += NBA_teams[key].get_possessions()
 
         marginal_offense = pts_produced - (0.92 * league_pts_per_poss * possessions)
@@ -205,6 +211,8 @@ class PlayerFactory:
         off_win_share = marginal_offense / marginal_pts_per_win
 
         player.set_offensive_win_share(off_win_share)
+
+        return off_win_share
 
     @classmethod
     def def_win_shares(cls, player, NBA_teams, NBA_teams_checklist):
@@ -220,6 +228,7 @@ class PlayerFactory:
 
         steals = player.get_steals()
         blocks = player.get_blocks()
+        mins = player.get_player_minutes()
         def_reb = player.get_def_reb_per_game()
         dfg = team.get_opponent_fg_pct()
         dor = team.get_opponent_dor_pct()
@@ -229,6 +238,29 @@ class PlayerFactory:
         stops = steals + blocks + fmwt * (1 - 1.07 * dor) + def_reb * (1 - fmwt)
 
         individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - stops) - team_rating)
+
+        team_poss = team.get_possessions()
+        league_poss = 0
+        league_pts = 0
+        for key, value in NBA_teams_checklist.items():
+            league_pts += NBA_teams[key].get_points_scored()
+            league_poss += NBA_teams[key].get_possessions()
+        league_pts_per_poss = league_pts / league_poss
+
+        #marginal def = (player minutes played / team minutes played) * (team defensive possessions) * (1.08 * (league points per possession) - ((Defensive Rating) / 100))
+        marginal_defense = (mins / 48) * (total_opponent_poss) * (1.08 * league_pts_per_poss - (individual_def_rating / 100))
+
+        #marginal pts per win = 0.32 * (league points per game) * ((team pace) / (league pace))
+        marginal_pts_per_win = 0.32 * 105.6 * (team_poss / league_poss)
+        
+        def_win_share = marginal_defense / marginal_pts_per_win
+        
+        player.set_defensive_win_share(def_win_share)
+        if player.FullName == "LeBron James":
+            print(str(league_pts) + " // " + str(league_poss))
+            print(str(fmwt))
+            print(str(stops) + " || " + str(individual_def_rating) + " || " + str(league_pts_per_poss) + " || " + str(marginal_defense))
+        return def_win_share
 
     @classmethod
     def usage(cls,player,raw_stats,NBA_teams,team_name_abbr):
