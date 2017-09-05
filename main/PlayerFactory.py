@@ -232,11 +232,26 @@ class PlayerFactory:
         def_reb = player.get_def_reb_per_game()
         dfg = team.get_opponent_fg_pct()
         dor = team.get_opponent_dor_pct()
+        player_fouls = 0
+
+        opp_fga = 0
+        opp_fgm = 0
+        opp_fta = 0
+        opp_ftm = 0
+        opp_tov = 0
+
+        team_stls = 0
+        team_fouls = 0
+        team_blks = 0
+        team_mins = 0
 
         fmwt = (dfg * (1 - dor)) / (dfg * (1 - dor) + dor * (1 - dfg))
-        #Stops = STL + BLK + FMwt * (1 - 1.07 * DOR%) + DREB * (1 - FMwt)
-        stops = steals + blocks + fmwt * (1 - 1.07 * dor) + def_reb * (1 - fmwt)
-
+        #Stops1 = STL + BLK + FMwt * (1 - 1.07 * DOR%) + DREB * (1 - FMwt)
+        stops_one = steals + blocks + fmwt * (1 - 1.07 * dor) + def_reb * (1 - fmwt)
+        # Stops2 = (((Opponent_FGA - Opponent_FGM - Team_BLK) / Team_MP) * FMwt * (1 - 1.07 * DOR%) + ((Opponent_TOV - Team_STL) / Team_MP)) * MP +
+        # (PF / Team_PF) * 0.4 * Opponent_FTA * (1 - (Opponent_FTM / Opponent_FTA))^2
+        stops_two = ((opp_fga - opp_fgm - team_blks) / team_mins) * fmwt * (1 - 1.07 * dor) + ((opp_tov - team_stls) / team_mins) * mins + (player_fouls / team_fouls) * 0.4 * opp_fta * ((1 - (opp_ftm / opp_fta)) ** 2)
+        stops = stops_one + stops_two
         individual_def_rating = team_rating + 0.2 * (100 * def_pts_per_scoring_poss * (1 - stops) - team_rating)
 
         team_poss = team.get_possessions()
