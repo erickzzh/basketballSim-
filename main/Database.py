@@ -61,6 +61,16 @@ def create_table_teams():
                                                     opponent_fg_pct REAL,
                                                     opponent_dor_pct REAL,
                                                     opponent_possession REAL,
+
+                                                    opponent_fga REAL,
+                                                    opponent_fgm REAL,
+                                                    opponent_turnover REAL,
+                                                    opponent_fta REAL,
+                                                    opponent_ftm REAL,
+                                                    fouls REAL,
+                                                    blocks REAL,
+                                                    steals REAL,
+                                                    field_goal_made REAL,
                                                     FOREIGN KEY (startyear) REFERENCES season_year(startyear)ON DELETE SET NULL)''')
 
 def create_table_player():
@@ -90,6 +100,7 @@ def create_table_player():
                                                     teamID REAL, 
                                                     teamName TEXT,
                                                     startyear REAL,
+                                                    fouls REAL,
                                                     FOREIGN KEY (teamID) REFERENCES team(teamID) ON DELETE SET NULL,
                                                     FOREIGN KEY (startyear) REFERENCES season_year(startyear) ON DELETE SET NULL)''')
 # def temp_method():
@@ -134,9 +145,18 @@ def team_entry(NBA_teams):
         free_throws_made = float(stats['FtMadePerGame']['#text'])
         field_goal_attempts_pct = float(stats['FgPct']['#text'])
         defensive_rebonds = float(stats['DefRebPerGame']['#text'])
+        field_goal_made = float(stats['FgMadePerGame']['#text'])
         opponent_fg_pct = 0
         opponent_dor_pct = 0
         opponent_possession = 0
+        opponent_fga = 0
+        opponent_fgm = 0
+        opponent_turnover = 0
+        opponent_fta = 0
+        opponent_ftm = 0
+        fouls = float(stats['FoulsPerGame']['#text'])
+        blocks  = float(stats['BlkPerGame']['#text'])
+        steals  = float(stats['StlPerGame']['#text'])
 
         startyear = 2016
         c.execute('''INSERT INTO team(teamID,
@@ -157,8 +177,17 @@ def team_entry(NBA_teams):
                                         defensive_rebonds ,
                                         opponent_fg_pct ,
                                         opponent_dor_pct,
-                                        opponent_possession) 
-                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
+                                        opponent_possession,
+                                        opponent_fga,
+                                        opponent_fgm,
+                                        opponent_turnover,
+                                        opponent_fta,
+                                        opponent_ftm,
+                                        fouls,
+                                        blocks,
+                                        steals,
+                                        field_goal_made                                        ) 
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'''
         						    , (teamid, 
                                         team_name_abbre,
                                         team_name,
@@ -180,7 +209,16 @@ def team_entry(NBA_teams):
                                         defensive_rebonds ,
                                         opponent_fg_pct ,
                                         opponent_dor_pct,
-                                        opponent_possession))
+                                        opponent_possession,
+                                        opponent_fga,
+                                        opponent_fgm,
+                                        opponent_turnover,
+                                        opponent_fta,
+                                        opponent_ftm,
+                                        fouls,
+                                        blocks,
+                                        steals,
+                                        field_goal_made))
         year_team_player.commit()
 
     #for loop to populate the opponent_fg_pct,opponent_dor_pct,opponent_possession values 
@@ -196,6 +234,11 @@ def team_entry(NBA_teams):
         opponent_fg_pct = 0
         opponent_dor_pct = 0
         opponent_possession = 0
+        opponent_fga = 0
+        opponent_fgm = 0
+        opponent_turnover = 0
+        opponent_fta = 0
+        opponent_ftm = 0
 
         for x in range (0,82):
             opponent = NBA_teams[team_name_abbre].game_schedule[x]
@@ -220,10 +263,47 @@ def team_entry(NBA_teams):
             c.execute('SELECT game_possession FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
             opponent_poss = c.fetchone()[0]   
             opponent_possession += opponent_poss 
+
+            #get opponent fga
+            c.execute('SELECT field_goal_attempts FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            fga = c.fetchone()[0]   
+            opponent_fga += fga 
+
+            #get opponent fgm
+            c.execute('SELECT field_goal_made FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            fgm = c.fetchone()[0]   
+            opponent_fgm += fgm 
+
+             #get opponent turnover
+            c.execute('SELECT turnovers FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            turnover = c.fetchone()[0]   
+            opponent_turnover += turnover 
+
+             #get opponent turnover
+            c.execute('SELECT field_goal_attempts FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            freethrow_attempts = c.fetchone()[0]   
+            opponent_fta+= freethrow_attempts 
+
+            #get opponent turnover
+            c.execute('SELECT free_throws_made FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            ftm = c.fetchone()[0]   
+            opponent_ftm+= ftm 
+
+
         #update table    
         c.execute('''UPDATE team SET opponent_fg_pct = ?/82,
                                      opponent_dor_pct = ?/82,
-                                     opponent_possession = ?/82 WHERE teamID = ?''',(opponent_fg_pct,opponent_dor_pct,opponent_possession,teamid,))
+                                     opponent_possession = ?/82, 
+                                     opponent_fga = ?/82,
+                                     opponent_fgm = ?/82,
+                                     opponent_turnover = ?/82,
+                                     opponent_fta = ?/82,
+                                     opponent_ftm = ?/82
+
+
+
+
+                                     WHERE teamID = ?''',(opponent_fg_pct,opponent_dor_pct,opponent_possession,opponent_fga,opponent_fgm,opponent_turnover,opponent_fta,opponent_ftm,teamid))
         year_team_player.commit()       
 
 
@@ -257,6 +337,7 @@ def player_entry(active_players):
         steals = float(raw_stats['StlPerGame']['#text'])
         blocks = float(raw_stats['BlkPerGame']['#text'])
         teamName = str(base['team']['Abbreviation'])
+        fouls = float(raw_stats['FoulPersPerGame']['#text'])
         usage = 0
 
 
@@ -293,8 +374,9 @@ def player_entry(active_players):
                                         steals,
                                         teamID, 
                                         teamName,
-                                        startyear)
-                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                        startyear,
+                                        fouls)
+                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
                                         (playerid,
                                         fitsname,
                                         lastname,
@@ -319,7 +401,8 @@ def player_entry(active_players):
                                         steals,
                                         teamID,
                                         teamName,
-                                        startyear))
+                                        startyear,
+                                        fouls))
 
         year_team_player.commit()
 
