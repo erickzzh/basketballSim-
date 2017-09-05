@@ -102,24 +102,24 @@ for key,value in NBA_teams_checklist.items():
     NBA_teams[key]=Team(key,value)
 
 # populate each team with a complete roster FROM API (need to find way to use this if DB is empty)
-# for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
-#     base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
-#     raw_stats = base['stats']
-#     raw_player = base['player']
-#     team_name_abbr = str(base['team']['Abbreviation'])
-#     team_id = base['team']['ID']
-#     #generate the player object and relevant stats
-#     player = PlayerFactory.make_player(raw_player)
-#     PlayerFactory.stats_filler(raw_stats, player)
-#     PlayerFactory.stat_calculator(player)
-#     TeamFactory.team_basic_stats_filler(NBA_teams, overall_team_standings)
-#     PlayerFactory.usage(player,raw_stats,NBA_teams,team_name_abbr)
-#     player.set_team_id(team_id)
-#     player.set_team_abbr(team_name_abbr)
-#     #populate the roster
-#     NBA_teams[team_name_abbr].add_players_roster(player.FullName)
-#     #populate the player class
-#     NBA_teams[team_name_abbr].add_player(player)
+for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
+    base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
+    raw_stats = base['stats']
+    raw_player = base['player']
+    team_name_abbr = str(base['team']['Abbreviation'])
+    team_id = base['team']['ID']
+    #generate the player object and relevant stats
+    player = PlayerFactory.make_player(raw_player)
+    PlayerFactory.stats_filler(raw_stats, player)
+    PlayerFactory.stat_calculator(player)
+    TeamFactory.team_basic_stats_filler(NBA_teams, overall_team_standings)
+    PlayerFactory.usage(player,raw_stats,NBA_teams,team_name_abbr)
+    player.set_team_id(team_id)
+    player.set_team_abbr(team_name_abbr)
+    #populate the roster
+    NBA_teams[team_name_abbr].add_players_roster(player.FullName)
+    #populate the player class
+    NBA_teams[team_name_abbr].add_player(player)
 
 assign_teamid(NBA_teams,overall_team_standings)
 #NBA_teams['BOS'].print_roster()   //print roster
@@ -140,21 +140,25 @@ TeamFactory.winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standi
 #pprint(NBA_teams['HOU'].roster_class["JamesHarden"].get_points_produced())
 # print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
-player_manager.load_players(NBA_teams, NBA_teams_checklist)
-#testing PPG after loading players
-print("\nPoints per game ranking after loading players from DB:")
-ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
-print("\n")
 #database test
 create_table_year()
 create_table_teams()
 #temp_method()
 create_table_player()
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
-# team_entry(NBA_teams)
-# player_entry(active_players)
+team_entry(NBA_teams)
+player_entry(active_players)
+
+
+
+player_manager.load_players(NBA_teams, NBA_teams_checklist)
+#testing PPG after loading players
+print("\nPoints per game ranking after loading players from DB:")
+ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
+print("\n")
+
 #uncomment the next line to test reading teams from DB
-#teams_from_db(NBA_teams,NBA_teams_checklist)
+TeamFactory.teams_from_db()
 ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)
