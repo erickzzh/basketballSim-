@@ -44,7 +44,16 @@ class TeamFactory:
 	                                defensive_rebonds,
 	                                opponent_fg_pct,
 	                                opponent_dor_pct,
-	                                opponent_possession from team''')
+	                                opponent_possession,
+									opponent_fga,
+                                    opponent_fgm,
+                                    opponent_turnover,
+                                    opponent_fta,
+                                    opponent_ftm,
+                                    fouls,
+                                    blocks,
+                                    steals,
+                                    field_goal_made from team''')
 		return (cls.extract_data(db_teams))
 
 
@@ -54,7 +63,8 @@ class TeamFactory:
 		#waiting on TeamFactory
 		for (teamID, team_name_abbre,team_name, full_name, field_goal_attempts,turnovers, 
 	         freethrow_attempts, offensive_rebonds, points_scored, points_allowed, game_possession, offensive_efficiency, defensive_efficiency,
-	         treys_made, free_throws_made, field_goal_attempts_pct, defensive_rebonds, opponent_fg_pct, opponent_dor_pct, opponent_possession) in db_teams:
+	         treys_made, free_throws_made, field_goal_attempts_pct, defensive_rebonds, opponent_fg_pct, opponent_dor_pct, opponent_possession,
+			 opponent_fga, opponent_fgm, opponent_turnover, opponent_fta, opponent_ftm, fouls, blocks, steals, field_goal_made) in db_teams:
 
 			a_team = Team.alt_init(team_name_abbre,team_name)
 	            
@@ -76,6 +86,16 @@ class TeamFactory:
 			a_team.set_opponent_fg_pct(opponent_fg_pct)
 			a_team.set_opponent_dor_pct(opponent_dor_pct)
 			a_team.set_opponent_possession(opponent_possession)
+
+			a_team.set_opponent_fga(opponent_fga)
+			a_team.set_opponent_fgm(opponent_fgm)
+			a_team.set_opponent_turnover(opponent_turnover)
+			a_team.set_opponent_fta(opponent_fta)
+			a_team.set_opponent_ftm(opponent_ftm)
+			a_team.set_fouls(fouls)
+			a_team.set_blocks(blocks)
+			a_team.set_steals(steals)
+			a_team.set_field_goal_made(field_goal_made)
 
 			teams.append(a_team)
 		return teams

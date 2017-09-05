@@ -36,6 +36,16 @@ class Team:
 		self.opponent_fg_pct = 0
 		self.opponent_dor_pct = 0
 		self.opponent_possession = 0
+		self.opponent_fga = 0
+		self.opponent_fgm = 0
+		self.opponent_turnover = 0
+		self.opponent_fta = 0
+		self.opponent_ftm = 0
+		self.fouls = 0
+		self.blocks = 0
+		self.steals = 0
+		self.field_goal_made = 0
+		self.total_win_share = 0
 
 	@classmethod
 	def alt_init(cls, team_name_abbre, team_name):
@@ -89,8 +99,8 @@ class Team:
 	def print_team_winning_percentage(self):
 		print (self.winning_percentage)
 
-
-
+	def print_total_win_share(self):
+		print ("%s total win share: %.2f" % (self.team_name_abbr, self.total_win_share))
 #getter 
 	def get_team_name_abbr(self):
 		return self.team_name_abbr
@@ -139,6 +149,32 @@ class Team:
 	def get_opponent_dor_pct(self):
 		return self.opponent_dor_pct
 
+	def get_opponent_fga(self):
+		return self.opponent_fga
+
+	def get_opponent_fgm(self):
+		return self.opponent_fgm
+
+	def get_opponent_turnover(self):
+		return self.opponent_turnover
+
+	def get_opponent_fta(self):
+		return self.opponent_fta
+
+	def get_opponent_ftm(self):
+		return self.opponent_ftm
+
+	def get_fouls(self):
+		return self.fouls
+    
+	def get_blocks(self):
+		return self.blocks
+
+	def get_steals(self):
+		return self.steals
+
+	def get_field_goal_made(self):
+		return self.field_goal_made
 #setter
 	def set_teamID(self,value):
 		self.teamid = value
@@ -223,3 +259,30 @@ class Team:
 
 	def set_free_throw_made(self,value):
 		self.free_throw_made = value
+
+	def set_opponent_fga(self, value):
+		self.opponent_fga = value
+
+	def set_opponent_fgm(self, value):
+		self.opponent_fgm = value
+
+	def set_opponent_turnover(self, value):
+		self.opponent_turnover = value
+
+	def set_opponent_fta(self, value):
+		self.opponent_fta = value
+
+	def set_opponent_ftm(self, value):
+		self.opponent_ftm = value
+
+	def set_fouls(self, value):
+		self.fouls = value
+    
+	def set_blocks(self, value):
+		self.blocks = value
+
+	def set_steals(self, value):
+		self.steals = value
+
+	def set_field_goal_made(self, value):
+		self.field_goal_made = value
