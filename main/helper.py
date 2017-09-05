@@ -22,6 +22,16 @@ def ranking_points_per_game(NBA_teams, NBA_teams_checklist, Ranking):
     for key, value in ranking_descending.items():
         print (key, value)
 
+def ranking_win_share(NBA_teams, NBA_teams_checklist, Ranking_wins):
+    for x in NBA_teams_checklist:
+        Ranking_wins[NBA_teams[x].team_name] = NBA_teams[x].total_win_share
+    #rank by value
+    ranking_desc = OrderedDict(sorted(Ranking_wins.items(), key = lambda t: t[1], reverse= True))
+    print('\n')
+    for key, value in ranking_desc.items():
+        print("%s total win share: %.2f" % (key, value))
+    print('\n')
+
 def get_each_team_schedule(NBA_teams, full_game_schedule):
     for b in range(0, len(full_game_schedule["fullgameschedule"]["gameentry"])):
         base = full_game_schedule["fullgameschedule"]["gameentry"][b]

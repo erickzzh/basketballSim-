@@ -13,7 +13,7 @@ class PlayerManager:
         players = PlayerFactory.players_from_db(NBA_teams)
         for player in players:
             #UNCOMMENT THE NEXT LINE TO TEST WIN SHARES
-            #PlayerFactory.win_shares(player, NBA_teams, NBA_teams_checklist)
+            PlayerFactory.win_shares(player, NBA_teams, NBA_teams_checklist)
             self.all_players[player.get_player_id()] = player
 
     def get_player_with_id(self, id):
