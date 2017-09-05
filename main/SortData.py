@@ -161,6 +161,9 @@ ranking_win_share(NBA_teams, NBA_teams_checklist, Ranking_wins)
 print("\nPoints per game ranking after loading players from DB:")
 ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 print("\n")
+
+print("\n")
+player_manager.rank_by_win_shares()
 #ranking(NBA_teams,NBA_teams_checklist,Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
 #trade_player(NBA_teams,NBA_teams_checklist)
