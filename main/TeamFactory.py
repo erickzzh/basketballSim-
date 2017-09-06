@@ -219,10 +219,10 @@ class TeamFactory:
 	        points_scored = float(base_stats['PtsPerGame']['#text'])
 	        points_allowed[team_name_abbr] = float(base_stats['PtsAgainstPerGame']['#text'])
 	        
-	        game_possession[team_name_abbr] = 0.96 * (field_goal_attempts + turnovers + 0.44 * freethrow_attempts - offensive_rebounds)
+	        game_possession[team_name_abbr] = 0.96 * (field_goal_attempts + turnovers + 0.44 * freethrow_attempts - offensive_rebounds) + 10
 	        offensive_efficiency[team_name_abbr]=100 * points_scored / game_possession[team_name_abbr]
 	        defensive_efficiency[team_name_abbr]=100 * points_allowed[team_name_abbr] / game_possession[team_name_abbr]
-	        print(team_name_abbr, offensive_efficiency[team_name_abbr], defensive_efficiency[team_name_abbr])
+	        print(team_name_abbr, offensive_efficiency[team_name_abbr], defensive_efficiency[team_name_abbr], game_possession[team_name_abbr])
 
 
 	    fig, ax = plt.subplots()
