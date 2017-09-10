@@ -309,102 +309,104 @@ def team_entry(NBA_teams):
 
 
 
-def player_entry(active_players):
+def player_entry(active_players_list):
     '''fill in all columns of each player in the players table'''
     for x in range(0, len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
         base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
-        raw_stats = base['stats']
         raw_player = base['player']
-        fitsname = raw_player['FirstName']
-        lastname = raw_player['LastName']
-        full_name = fitsname+" "+lastname
-        position = raw_player['Position']
         playerid = raw_player['ID']
-        teamID = base['team']['ID']
-        team_name_abbr = str(base['team']['Abbreviation'])
-        points_per_game = float(raw_stats['PtsPerGame']['#text'])
-        assists_per_game = float(raw_stats['AstPerGame']['#text'])
-        field_goal_attempts = float(raw_stats['FgAttPerGame']['#text'])
-        field_goals_made = float(raw_stats['FgMadePerGame']['#text'])
-        free_throw_attempts = float(raw_stats['FtAttPerGame']['#text'])
-        free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
-        treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
-        off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
-        def_reb_per_game = float(raw_stats['DefRebPerGame']['#text'])
-        turnover = float(raw_stats['TovPerGame']['#text'])
-        minutes = float(raw_stats['MinSecondsPerGame']['#text'])/60.0
-        minutes = round(minutes,1)
-        steals = float(raw_stats['StlPerGame']['#text'])
-        blocks = float(raw_stats['BlkPerGame']['#text'])
-        teamName = str(base['team']['Abbreviation'])
-        fouls = float(raw_stats['FoulPersPerGame']['#text'])
-        usage = 0
+        if playerid in active_players_list:
+	        raw_stats = base['stats']
+
+	        fitsname = raw_player['FirstName']
+	        lastname = raw_player['LastName']
+	        full_name = fitsname+" "+lastname
+	        position = raw_player['Position']
+	        teamID = base['team']['ID']
+	        team_name_abbr = str(base['team']['Abbreviation'])
+	        points_per_game = float(raw_stats['PtsPerGame']['#text'])
+	        assists_per_game = float(raw_stats['AstPerGame']['#text'])
+	        field_goal_attempts = float(raw_stats['FgAttPerGame']['#text'])
+	        field_goals_made = float(raw_stats['FgMadePerGame']['#text'])
+	        free_throw_attempts = float(raw_stats['FtAttPerGame']['#text'])
+	        free_throws_made = float(raw_stats['FtMadePerGame']['#text'])
+	        treys_made = float(raw_stats['Fg3PtMadePerGame']['#text'])
+	        off_reb_per_game = float(raw_stats['OffRebPerGame']['#text'])
+	        def_reb_per_game = float(raw_stats['DefRebPerGame']['#text'])
+	        turnover = float(raw_stats['TovPerGame']['#text'])
+	        minutes = float(raw_stats['MinSecondsPerGame']['#text'])/60.0
+	        minutes = round(minutes,1)
+	        steals = float(raw_stats['StlPerGame']['#text'])
+	        blocks = float(raw_stats['BlkPerGame']['#text'])
+	        teamName = str(base['team']['Abbreviation'])
+	        fouls = float(raw_stats['FoulPersPerGame']['#text'])
+	        usage = 0
 
 
-        if free_throw_attempts > 0:
-            effective_field_goal_percentage = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100.0
-            true_shooting_percentage = points_per_game / (2.0 * (field_goal_attempts + 0.44 * free_throw_attempts)) * 100.0
-        points_produced = ((1.45 * field_goals_made) +
-                           (2.2 * treys_made) + free_throws_made +
-                           (0.6 * off_reb_per_game) +
-                           (0.6 * assists_per_game))
+	        if free_throw_attempts > 0:
+	            effective_field_goal_percentage = ((field_goals_made + (0.5 * treys_made)) / field_goal_attempts) * 100.0
+	            true_shooting_percentage = points_per_game / (2.0 * (field_goal_attempts + 0.44 * free_throw_attempts)) * 100.0
+	        points_produced = ((1.45 * field_goals_made) +
+	                           (2.2 * treys_made) + free_throws_made +
+	                           (0.6 * off_reb_per_game) +
+	                           (0.6 * assists_per_game))
 
-        startyear = 2016
-        c.execute('''INSERT INTO player(playerID,
-                                        Firstname,
-                                        Lastname,
-                                        Fullname,
-                                        position,
-                                        points_per_game,
-                                        assists_per_game,
-                                        effective_field_goal_percentage,
-                                        true_shooting_percentage,
-                                        field_goal_attempts,
-                                        field_goals_made,
-                                        free_throw_attempts,
-                                        free_throws_made,
-                                        treys_made,
-                                        off_reb_per_game,
-                                        def_reb_per_game,
-                                        points_produced,
-                                        turnover,
-                                        usage,
-                                        minutes,
-                                        blocks,
-                                        steals,
-                                        teamID, 
-                                        teamName,
-                                        startyear,
-                                        fouls)
-                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
-                                        (playerid,
-                                        fitsname,
-                                        lastname,
-                                        full_name,
-                                        position,
-                                        points_per_game,
-                                        assists_per_game,
-                                        effective_field_goal_percentage,
-                                        true_shooting_percentage,
-                                        field_goal_attempts,
-                                        field_goals_made,
-                                        free_throw_attempts,
-                                        free_throws_made,
-                                        treys_made,
-                                        off_reb_per_game,
-                                        def_reb_per_game,
-                                        points_produced,
-                                        turnover,
-                                        usage,
-                                        minutes,
-                                        blocks,
-                                        steals,
-                                        teamID,
-                                        teamName,
-                                        startyear,
-                                        fouls))
+	        startyear = 2016
+	        c.execute('''INSERT INTO player(playerID,
+	                                        Firstname,
+	                                        Lastname,
+	                                        Fullname,
+	                                        position,
+	                                        points_per_game,
+	                                        assists_per_game,
+	                                        effective_field_goal_percentage,
+	                                        true_shooting_percentage,
+	                                        field_goal_attempts,
+	                                        field_goals_made,
+	                                        free_throw_attempts,
+	                                        free_throws_made,
+	                                        treys_made,
+	                                        off_reb_per_game,
+	                                        def_reb_per_game,
+	                                        points_produced,
+	                                        turnover,
+	                                        usage,
+	                                        minutes,
+	                                        blocks,
+	                                        steals,
+	                                        teamID, 
+	                                        teamName,
+	                                        startyear,
+	                                        fouls)
+	                                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+	                                        (playerid,
+	                                        fitsname,
+	                                        lastname,
+	                                        full_name,
+	                                        position,
+	                                        points_per_game,
+	                                        assists_per_game,
+	                                        effective_field_goal_percentage,
+	                                        true_shooting_percentage,
+	                                        field_goal_attempts,
+	                                        field_goals_made,
+	                                        free_throw_attempts,
+	                                        free_throws_made,
+	                                        treys_made,
+	                                        off_reb_per_game,
+	                                        def_reb_per_game,
+	                                        points_produced,
+	                                        turnover,
+	                                        usage,
+	                                        minutes,
+	                                        blocks,
+	                                        steals,
+	                                        teamID,
+	                                        teamName,
+	                                        startyear,
+	                                        fouls))
 
-        year_team_player.commit()
+	        year_team_player.commit()
 
 def grab_data():
     '''obtain data for testing purposes'''
