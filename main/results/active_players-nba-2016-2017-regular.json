@@ -3847,32 +3847,6 @@
             },
             {
                 "player": {
-                    "Position": "C",
-                    "LastName": "Duncan",
-                    "BirthDate": "1976-04-25",
-                    "BirthCity": "Christiansted, Virgin Islands",
-                    "Height": "6'11\"",
-                    "BirthCountry": "USA",
-                    "Age": "41",
-                    "externalMapping": {
-                        "ID": "1495",
-                        "Source": "NBA.com"
-                    },
-                    "IsRookie": "false",
-                    "Weight": "250",
-                    "JerseyNumber": "21",
-                    "ID": "9482",
-                    "FirstName": "Tim"
-                },
-                "team": {
-                    "ID": "106",
-                    "Name": "Spurs",
-                    "Abbreviation": "SAS",
-                    "City": "San Antonio"
-                }
-            },
-            {
-                "player": {
                     "Position": "SF",
                     "LastName": "Dunleavy",
                     "BirthDate": "1980-09-15",

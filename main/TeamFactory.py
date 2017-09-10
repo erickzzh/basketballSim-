@@ -239,7 +239,7 @@ class TeamFactory:
 	    #top right savage teams
 	    #bottom left dumb fk teams
 	    #need to work on the annotate function
-	    plt.ylim(125, 110)
+	    plt.ylim(110, 100)
 	    plt.xlabel("offensive efficiency")
 	    plt.ylabel("defensive efficiency")
 	    plt.title("efficiency plot")
