@@ -109,8 +109,8 @@ for key,value in NBA_teams_checklist.items():
     NBA_teams[key]=Team(key,value)
 
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
-# team_entry(NBA_teams)
-# player_entry(active_players_list)
+team_entry(NBA_teams)
+player_entry(active_players_list)
 # UNCOMMENT THIS LOADING FROM DB METHOD TO TEST WIN SHARES
 
 teams = TeamFactory.teams_from_db()

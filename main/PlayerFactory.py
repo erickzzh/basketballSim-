@@ -248,7 +248,7 @@ class PlayerFactory:
         team_stls = team.get_steals()
         team_fouls = team.get_fouls()
         team_blks = team.get_blocks()
-        team_mins = 48
+        team_mins = 48*5
 
         # D_Pts_per_ScPoss = Opponent_PTS / (Opponent_FGM + (1 - (1 - (Opponent_FTM / Opponent_FTA))^2) * Opponent_FTA*0.4)
         def_pts_per_scoring_poss = pts_allowed / total_opponent_poss #pts_allowed / (opp_fgm + (1 - (1 - (opp_ftm / opp_fta)) ** 2) * opp_fta * 0.4) 
@@ -278,7 +278,7 @@ class PlayerFactory:
         league_pts_per_poss = league_pts / league_poss
 
         #marginal def = (player minutes played / team minutes played) * (team defensive possessions) * (1.08 * (league points per possession) - ((Defensive Rating) / 100))
-        marginal_defense = (mins / (48)) * (total_opponent_poss) * (1.08 * league_pts_per_poss - (individual_def_rating / 100))
+        marginal_defense = (mins / (team_mins)) * (team_poss) * (1.08 * league_pts_per_poss - (individual_def_rating / 100))
 
         #marginal pts per win = 0.32 * (league points per game) * ((team pace) / (league pace))
         marginal_pts_per_win = 0.32 * 105.6 * (team_poss / league_poss)
@@ -286,7 +286,7 @@ class PlayerFactory:
         def_win_share = marginal_defense / marginal_pts_per_win
         
         player.set_defensive_win_share(def_win_share)
-        if player.FullName == "Stephen Curry":
+        if player.FullName == "LeBron James":
             print(str(league_pts) + " // " + str(league_poss))
             print(str(fmwt))
             print(str(stops_pct) + " || " + str(individual_def_rating) + " || " + str(def_pts_per_scoring_poss) + " || " + str(marginal_defense))

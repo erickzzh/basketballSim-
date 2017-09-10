@@ -248,7 +248,6 @@ def team_entry(NBA_teams):
             #get opponent field goal %
             c.execute('SELECT field_goal_attempts_pct FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
             fg_pct = c.fetchone()[0]
-            print(fg_pct)
             opponent_fg_pct += fg_pct
             year_team_player.commit()
 
@@ -280,7 +279,7 @@ def team_entry(NBA_teams):
             opponent_turnover += turnover 
 
              #get opponent turnover
-            c.execute('SELECT field_goal_attempts FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
+            c.execute('SELECT freethrow_attempts FROM team WHERE teamID=? AND startyear=2016',(opponent_id,))
             freethrow_attempts = c.fetchone()[0]   
             opponent_fta+= freethrow_attempts 
 
