@@ -263,7 +263,7 @@ class PlayerFactory:
 
         stops = abs(stops_one + stops_two)
         if mins > 0:
-            stops_pct = (stops * 48) / (team_poss * mins)
+            stops_pct = (stops * mins) / (team_poss * mins)
         else:
             stops_pct = 0
 
