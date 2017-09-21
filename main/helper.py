@@ -74,11 +74,26 @@ def trade_player(NBA_teams, NBA_teams_checklist,Ranking):
     team1 = input("Which team? (enter abbre only) : ").upper()
     team_one = NBA_teams[team1]
     team_one.print_roster_and_points()
+    team_one_players_to_trade = []
+    roster_copy = team_one.roster[:]
 
     player1 = input("Which player? (enter Full name including upper case and space) : ")#will change later
+    team_one_players_to_trade.append(player1)
+    roster_copy.remove(player1)
+
+    keep_trading = True if input("Add another player to the trade? (type Y/N): ").upper() == "Y" else False
+
+    while(keep_trading):
+        print("Players remaining:")
+        print(*roster_copy, sep='\n')
+        another_player = input("Which player? (enter Full name including upper case and space) : ")#will change later
+        team_one_players_to_trade.append(another_player)
+        roster_copy.remove(another_player)
+        keep_trading = True if input("Add another player to the trade? (type Y/N): ").upper() == "Y" else False
+
     pprint(NBA_teams_checklist)
 
-    team2 = input("Which team? (enter abbre only) : ").upper()
+    team2 = input("Which team to trade with? (enter abbre only) : ").upper()
     team_two = NBA_teams[team2]
     team_two.print_roster_and_points()
 
