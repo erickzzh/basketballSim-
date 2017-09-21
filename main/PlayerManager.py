@@ -27,5 +27,14 @@ class PlayerManager:
             temp_players[self.all_players[key].get_full_name()] = self.all_players[key].get_total_win_share()
         
         ranked = OrderedDict(sorted(temp_players.items(), key = lambda t: t[1], reverse= True))
-        for key, value in ranked.items():
-            print("%s total win share: %.2f" % (key, value))
+        # for key, value in ranked.items():
+        #     print("%s total win share: %.2f" % (key, value))
+    def player_win_share_percentage(self,NBA_teams):
+        for key, value in self.all_players.items():
+            temp_players_win_share = self.all_players[key].get_total_win_share()
+            temp_player_team = self.all_players[key].get_team_abbr()
+            team_win_share = NBA_teams[temp_player_team].get_total_win_share()
+            temp_player_name = self.all_players[key].get_full_name()
+            #calculate the ratio and assign it to the player
+            self.all_players[key].set_win_share_normalized(temp_players_win_share/team_win_share)
+            #print(temp_player_name, temp_players_win_share/team_win_share*100)

@@ -175,6 +175,9 @@ class Team:
 
 	def get_field_goal_made(self):
 		return self.field_goal_made
+
+	def get_total_win_share(self):
+		return self.total_win_share
 #setter
 	def set_teamID(self,value):
 		self.teamid = value

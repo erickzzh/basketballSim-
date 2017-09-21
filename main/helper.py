@@ -41,35 +41,35 @@ def get_each_team_schedule(NBA_teams, full_game_schedule):
         NBA_teams[awayTeam].game_schedule.append(homeTeam)
 
 
-def ranking(NBA_teams, NBA_teams_checklist,Ranking):
+def sim(NBA_teams, NBA_teams_checklist,Ranking,overall_team_standings):
     for b in range(0, len(overall_team_standings["overallteamstandings"]["teamstandingsentry"])):
         team_name_abbr = overall_team_standings['overallteamstandings']['teamstandingsentry'][b]['team']['Abbreviation']
         team = NBA_teams[team_name_abbr]
         for x in range(0,50):
             for a in range(0, len(team.game_schedule)):
+
                 opponent = team.game_schedule[a]
                 # #remove team from the opponent's game schedule
                 # while team_name_abbr in NBA_teams[opponent].game_schedule: NBA_teams[opponent].game_schedule.remove(team_name_abbr)
                 expected_winning_percentage = team.expected_winning_percentage[opponent]
                 temp_array = [team_name_abbr, opponent]
                 winning_team = np.random.choice(temp_array, 1, p=[expected_winning_percentage, 1-expected_winning_percentage])
-
                 if winning_team[0] == team_name_abbr:
                     team.sim_win += 1
                     NBA_teams[opponent].sim_FAT_L += 1
                 else:
                     NBA_teams[opponent].sim_win += 1
                     team.sim_FAT_L += 1
-
     for y in NBA_teams_checklist:
         Ranking[NBA_teams[y].team_name] = round(NBA_teams[y].get_sim_win()/100,1)
 
+def ranking_by_sim(Ranking):
     #rank by value
     ranking_descending=OrderedDict(sorted(Ranking.items(), key=lambda t: t[1],reverse=True))
     for key, value in ranking_descending.items():
         print (key, value, "-", round(82-value,1))
 
-def trade_player(NBA_teams, NBA_teams_checklist):
+def trade_player(NBA_teams, NBA_teams_checklist,Ranking):
     pprint(NBA_teams_checklist)
     team1 = input("Which team? (enter abbre only) : ").upper()
     team_one = NBA_teams[team1]
@@ -95,6 +95,22 @@ def trade_player(NBA_teams, NBA_teams_checklist):
     team_one.roster_class[player2] = team_one.roster_class.pop(player1)
     team_two.roster_class[player2] = player_one_object
     team_two.roster_class[player1] = team_two.roster_class.pop(player2)
+
+
+    #trade with win share
+    temp_sim_win = team_one.get_sim_win()/100 - team_one.get_sim_win()/100 * player_one_object.get_win_share_normalized() + team_two.get_sim_win()/100 * player_two_object.get_win_share_normalized()
+    print(temp_sim_win)
+    team_one.set_sim_win(temp_sim_win*100)
+    team_one.set_sim_FAT_L(82 - temp_sim_win/100)
+    temp_sim_win = team_two.get_sim_win()/100 - team_two.get_sim_win()/100 * player_two_object.get_win_share_normalized() + team_one.get_sim_win()/100 * player_one_object.get_win_share_normalized()
+    print(temp_sim_win)
+   
+    team_two.set_sim_win(temp_sim_win*100)
+    team_two.set_sim_FAT_L(82 - temp_sim_win/100)
+
+    Ranking[team_one.team_name] = team_one.get_sim_win()/100
+    Ranking[team_two.team_name] = team_two.get_sim_win()/100
+
 
     print('after the trade:\n')
     print(team1 + '\n')

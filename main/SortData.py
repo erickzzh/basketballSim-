@@ -105,18 +105,20 @@ create_table_teams()
 create_table_player()
 
 #old nba_teams filling method
+#use this for the initiall load
 for key,value in NBA_teams_checklist.items():
     NBA_teams[key]=Team(key,value)
 
-get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
-team_entry(NBA_teams)
-player_entry(active_players_list)
-# UNCOMMENT THIS LOADING FROM DB METHOD TO TEST WIN SHARES
 
+#use this when database is full
 teams = TeamFactory.teams_from_db()
 for team in teams:
     NBA_teams[team.get_team_name_abbr()] = team
 
+get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
+# team_entry(NBA_teams)
+# player_entry(active_players_list)
+# UNCOMMENT THIS LOADING FROM DB METHOD TO TEST WIN SHARES
 # populate each team with a complete roster FROM API (need to find way to use this if DB is empty)
 for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
     base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
@@ -149,9 +151,8 @@ NBA_teams['GSW'].print_roster()   #//print roster
 #NBA_teams['GSW'].team_theoretical_points() 
 #####################################################################################################################
 ###########################test###############################################
-ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
+
 #trade_player(NBA_teams,NBA_teams_checklist)
-ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 TeamFactory.off_and_deff_efficiency_rating(overall_team_standings,offensive_efficiency,defensive_efficiency,NBA_teams,NBA_teams_checklist)
 #NBA_teams['BOS'].change_effeiciency()
 TeamFactory.four_factors(NBA_teams,NBA_teams_checklist, overall_team_standings)
@@ -174,6 +175,7 @@ player_manager.load_players(NBA_teams, NBA_teams_checklist)
 Ranking_wins = {}
 ranking_win_share(NBA_teams, NBA_teams_checklist, Ranking_wins)
 
+
 #testing PPG after loading players
 print("\nPoints per game ranking after loading players from DB:")
 ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
@@ -181,9 +183,13 @@ print("\n")
 
 print("\n")
 player_manager.rank_by_win_shares()
-#ranking(NBA_teams,NBA_teams_checklist,Ranking)
+player_manager.player_win_share_percentage(NBA_teams)
+
+sim(NBA_teams,NBA_teams_checklist,Ranking,overall_team_standings)
+ranking_by_sim(Ranking)
 # @ERICK: uncomment later to test trade and re-ordering of teams
-#trade_player(NBA_teams,NBA_teams_checklist)
+trade_player(NBA_teams,NBA_teams_checklist,Ranking)
+ranking_by_sim(Ranking)
 #ranking_points_per_game(NBA_teams,NBA_teams_checklist,Ranking)
 
 ################factory reset###############

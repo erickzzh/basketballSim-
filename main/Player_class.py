@@ -30,6 +30,7 @@ class Player:
 		self.steals = 0
 		self.blocks = 0
 		self.fouls = 0
+		self.win_share_normalized = 0
 
 	def print_name(self):
 		print (self.FullName)
@@ -119,6 +120,9 @@ class Player:
 	def get_fouls(self):
 		return self.fouls
 
+	def get_win_share_normalized(self):
+		return self.win_share_normalized
+
 	#setters
 	def set_player_id(self, value):
 		self.player_id = value
@@ -194,6 +198,9 @@ class Player:
 
 	def set_fouls(self, value):
 		self.fouls = value
+
+	def set_win_share_normalized(self,value):
+		self.win_share_normalized = value
 
 	@classmethod
 	def alt_init(cls, FirstName, LastName, Position):
