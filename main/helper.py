@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 import math
 import numpy as np
+import copy
 from Database import *
 
 def assign_teamid(NBA_teams, overall_team_standings):
@@ -75,12 +76,18 @@ def trade_player(NBA_teams, NBA_teams_checklist,Ranking):
     team_one = NBA_teams[team1]
     team_one.print_roster_and_points()
     team_one_players_to_trade = []
-    roster_copy = team_one.roster[:]
-
+    roster_copy = []
+    roster_copy.extend(team_one.roster)
+    # print(len(team_one.roster))
+    # print(*roster_copy, sep='\n')
     player1 = input("Which player? (enter Full name including upper case and space) : ")#will change later
     team_one_players_to_trade.append(player1)
+    team_one_id = team_one.teamid
     roster_copy.remove(player1)
-
+    # print("After one player was added:")
+    # print(*roster_copy, sep='\n')
+    # print("Original list:")
+    # team_one.print_roster_and_points()
     keep_trading = True if input("Add another player to the trade? (type Y/N): ").upper() == "Y" else False
 
     while(keep_trading):
@@ -89,35 +96,67 @@ def trade_player(NBA_teams, NBA_teams_checklist,Ranking):
         another_player = input("Which player? (enter Full name including upper case and space) : ")#will change later
         team_one_players_to_trade.append(another_player)
         roster_copy.remove(another_player)
-        keep_trading = True if input("Add another player to the trade? (type Y/N): ").upper() == "Y" else False
+        keep_trading = True if input("Add another player from this team to the trade? (type Y/N): ").upper() == "Y" else False
 
     pprint(NBA_teams_checklist)
 
     team2 = input("Which team to trade with? (enter abbre only) : ").upper()
     team_two = NBA_teams[team2]
     team_two.print_roster_and_points()
+    team_two_players_to_trade = []
+    roster_copy = []
+    roster_copy.extend(team_two.roster)
 
     player2=input("Which player? (enter Full name including upper case and space) : ")#will change later
+    team_two_id = team_two.teamid
+    team_two_players_to_trade.append(player2)
+    roster_copy.remove(player2)
 
-    team_one.trade_players_roster(player1, player2)
-    team_two.trade_players_roster(player2, player1)
+    keep_trading = True if input("Add another player to the trade? (type Y/N): ").upper() == "Y" else False
 
-    player_one_object = team_one.roster_class[player1]
-    player_two_object = team_two.roster_class[player2]
+    while(keep_trading):
+        print("Players remaining:")
+        print(*roster_copy, sep='\n')
+        another_player = input("Which player? (enter Full name including upper case and space) : ")#will change later
+        team_two_players_to_trade.append(another_player)
+        roster_copy.remove(another_player)
+        keep_trading = True if input("Add another player from this team to the trade? (type Y/N): ").upper() == "Y" else False
 
-    #new trade stuff
-    team_one.roster_class[player1] = player_two_object
-    team_one.roster_class[player2] = team_one.roster_class.pop(player1)
-    team_two.roster_class[player2] = player_one_object
-    team_two.roster_class[player1] = team_two.roster_class.pop(player2)
+    # new new trade stuff
+    team_one_player_win_shares = 0
+    team_two_player_win_shares = 0
+    team_one_player_objects = {}
+    team_two_player_objects = {}
+    for a_player in team_one_players_to_trade:
+        win_share = team_one.roster_class[a_player].get_win_share_normalized()
+        team_one_player_win_shares += win_share
+        #get all of the player objects from the teams to trade
+        team_one_player_objects[a_player] = team_one.roster_class[a_player]
+        team_one.roster_class.pop(a_player)
+        #remove player names from the roster list
+        team_one.roster.remove(a_player)
+    team_one.roster.extend(team_two_players_to_trade)
 
+    # do the same for the other team
+    for a_player in team_two_players_to_trade:
+        win_share = team_two.roster_class[a_player].get_win_share_normalized()
+        team_two_player_win_shares += win_share
+        team_two_player_objects[a_player] = team_two.roster_class[a_player]
+        team_two.roster_class.pop(a_player)
+        team_two.roster.remove(a_player)
+    team_two.roster.extend(team_one_players_to_trade)
+
+    # now, trade the player objects between roster classes
+    team_two.roster_class.update(team_one_player_objects)
+    team_one.roster_class.update(team_two_player_objects)
+    
 
     #trade with win share
-    temp_sim_win = team_one.get_sim_win()/100 - team_one.get_sim_win()/100 * player_one_object.get_win_share_normalized() + team_two.get_sim_win()/100 * player_two_object.get_win_share_normalized()
+    temp_sim_win = team_one.get_sim_win()/100 - team_one.get_sim_win()/100 * team_one_player_win_shares + team_two.get_sim_win()/100 * team_two_player_win_shares
     print(temp_sim_win)
     team_one.set_sim_win(temp_sim_win*100)
     team_one.set_sim_FAT_L(82 - temp_sim_win/100)
-    temp_sim_win = team_two.get_sim_win()/100 - team_two.get_sim_win()/100 * player_two_object.get_win_share_normalized() + team_one.get_sim_win()/100 * player_one_object.get_win_share_normalized()
+    temp_sim_win = team_two.get_sim_win()/100 - team_two.get_sim_win()/100 * team_two_player_win_shares + team_one.get_sim_win()/100 * team_one_player_win_shares
     print(temp_sim_win)
    
     team_two.set_sim_win(temp_sim_win*100)
@@ -134,7 +173,9 @@ def trade_player(NBA_teams, NBA_teams_checklist,Ranking):
     team_two.print_roster_and_points()
     print ('\n')
     #update the actual database
-    trade_player_db(player_one_object, player_two_object)
+
+    trade_multi_players_db(team1, team2, team_one_id, team_two_id, team_one_player_objects, team_two_player_objects)
+    #trade_player_db(player_one_object, player_two_object)
 
 # def off_and_deff_efficiency_rating(overall_team_standings, offensive_efficiency, defensive_efficiency, NBA_teams, NBA_teams_checklist):
 #     '''offensive efficiency and defensive efficiency of each team'''

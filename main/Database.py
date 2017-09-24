@@ -427,4 +427,21 @@ def trade_player_db(firstPlayer, secondPlayer):
               ' WHERE playerID = ' + str(secondPlayer.get_player_id()))
     year_team_player.commit()
 
+def trade_multi_players_db(team_one_name, team_two_name, team_one_id, team_two_id, team_one_players_to_trade, team_two_players_to_trade):
+    '''updates the players table to reflect the trade specified by the user'''
+    #trade team one's players to team two
+    for player_name, player_obj in team_one_players_to_trade.items():
+        c.execute('UPDATE player SET teamID = ' + team_two_id +
+              ' WHERE playerID = ' + str(player_obj.get_player_id()))
+        # c.execute('UPDATE player SET teamName = ' + team_two_name +
+        #       ' WHERE playerID = ' + str(player_obj.get_player_id()))
+
+    #trade team two's players to team one
+    for player_name, player_obj in team_two_players_to_trade.items():
+        c.execute('UPDATE player SET teamID = ' + team_one_id +
+              ' WHERE playerID = ' + str(player_obj.get_player_id()))
+        # c.execute('UPDATE player SET teamName = ' + team_one_name +
+        #       ' WHERE playerID = ' + str(player_obj.get_player_id()))
+
+    year_team_player.commit()
 #data_entry()
