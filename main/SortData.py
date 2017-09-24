@@ -118,32 +118,42 @@ for team in teams:
 get_each_team_schedule(NBA_teams,full_game_schedule) #needs to run before team_entry()
 # team_entry(NBA_teams)
 # player_entry(active_players_list)
-# UNCOMMENT THIS LOADING FROM DB METHOD TO TEST WIN SHARES
+
+# LOADING METHOD FROM DB STARTS HERE
+TeamFactory.teams_from_db()
+player_manager.load_players(NBA_teams, NBA_teams_checklist)
+Ranking_wins = {}
+ranking_win_share(NBA_teams, NBA_teams_checklist, Ranking_wins)
+# LOADING METHOD FROM DB ENDS HERE
+
+# LOADING METHOD FROM JSON STARTS HERE
 # populate each team with a complete roster FROM API (need to find way to use this if DB is empty)
-for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
-    base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
-    raw_player = base['player']
-    playerID = raw_player['ID']
+# for x in range(0,len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'])):
+#     base = cumulative_player_stats['cumulativeplayerstats']['playerstatsentry'][x]
+#     raw_player = base['player']
+#     playerID = raw_player['ID']
 
-    if playerID in active_players_list:
-        raw_stats = base['stats']
+#     if playerID in active_players_list:
+#         raw_stats = base['stats']
 
-        team_name_abbr = str(base['team']['Abbreviation'])
-        team_id = base['team']['ID']
-        #generate the player object and relevant stats
-        player = PlayerFactory.make_player(raw_player)
-        PlayerFactory.stats_filler(raw_stats, player)
-        PlayerFactory.stat_calculator(player)
-        TeamFactory.team_basic_stats_filler(NBA_teams, overall_team_standings)
-        PlayerFactory.usage(player,raw_stats,NBA_teams,team_name_abbr)
-        player.set_team_id(team_id)
-        player.set_team_abbr(team_name_abbr)
-        #populate the roster
-        NBA_teams[team_name_abbr].add_players_roster(player.FullName)
-        #populate the player class
-        NBA_teams[team_name_abbr].add_player(player)
-    else:
-        pass
+#         team_name_abbr = str(base['team']['Abbreviation'])
+#         team_id = base['team']['ID']
+#         #generate the player object and relevant stats
+#         player = PlayerFactory.make_player(raw_player)
+#         PlayerFactory.stats_filler(raw_stats, player)
+#         PlayerFactory.stat_calculator(player)
+#         TeamFactory.team_basic_stats_filler(NBA_teams, overall_team_standings)
+#         PlayerFactory.usage(player,raw_stats,NBA_teams,team_name_abbr)
+#         player.set_team_id(team_id)
+#         player.set_team_abbr(team_name_abbr)
+#         #populate the roster
+#         NBA_teams[team_name_abbr].add_player_by_name(player.FullName)
+#         #NBA_teams[team_name_abbr].add_players_roster(player.FullName)
+#         #populate the player class
+#         NBA_teams[team_name_abbr].add_player(player)
+#     else:
+#         pass
+# LOADING METHOD FROM JSON ENDS HERE
 
 assign_teamid(NBA_teams,overall_team_standings)
 NBA_teams['GSW'].print_roster()   #//print roster
@@ -164,17 +174,6 @@ TeamFactory.winning_percentage(NBA_teams,NBA_teams_checklist,overall_team_standi
 # print(len(cumulative_player_stats['cumulativeplayerstats']['playerstatsentry']))
 
 #database test
-
-
-
-
-
-#uncomment the next line to test reading teams from DB
-TeamFactory.teams_from_db()
-player_manager.load_players(NBA_teams, NBA_teams_checklist)
-Ranking_wins = {}
-ranking_win_share(NBA_teams, NBA_teams_checklist, Ranking_wins)
-
 
 #testing PPG after loading players
 print("\nPoints per game ranking after loading players from DB:")
